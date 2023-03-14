@@ -7,35 +7,51 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Review {
-  email     String
-  author    String   @db.VarChar(20)
-  station   String   @db.VarChar(20)
-  body      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  id        Int      @id @default(autoincrement())
+model User {
+  id       String     @id @unique @default(uuid())
+  email    String     @unique @db.VarChar(100)
+  name     String     @db.VarChar(20)
+  nickname String     @unique @db.VarChar(20)
+  password String     @db.VarChar(20)
+  Review   Review[]
+  LikeList LikeList[]
 }
 
 model Station {
-  stationNum Int    @id @default(autoincrement())
-  realtime   String @db.VarChar(20)
-  feeltime   String
-  station    String
+  id              String            @id @unique @default(uuid())
+  station_line    String            @db.VarChar(10)
+  station_name    String            @db.VarChar(30)
+  Review          Review[]
+  StationLocation StationLocation[]
+  LikeList        LikeList[]
 }
 
-model StationLike {
-  email      String
-  stationNum Int
-  id         Int    @id @default(autoincrement())
-  station    String
+model StationLocation {
+  station_id String  @db.VarChar(40)
+  area       String  @db.VarChar(20)
+  pos_x      String  @db.VarChar(40)
+  pos_y      String  @db.VarChar(40)
+  station    Station @relation(fields: [station_id], references: [id])
+
+  @@id([pos_x, pos_y])
 }
 
-model User {
-  email    String
-  name     String @db.VarChar(20)
-  nickname String @db.VarChar(20)
-  password String @db.VarChar(20)
-  station  String @db.VarChar(30)
-  id       Int    @id @default(autoincrement())
+model Review {
+  id         String   @id @unique @default(uuid())
+  user_id    String   @db.VarChar(40)
+  station_id String   @db.VarChar(40)
+  body       String   @db.VarChar(300)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [user_id], references: [id])
+  station    Station  @relation(fields: [station_id], references: [id])
+}
+
+model LikeList {
+  user_id    String  @db.VarChar(40)
+  station_id String  @db.VarChar(40)
+  user       User    @relation(fields: [user_id], references: [id])
+  station    Station @relation(fields: [station_id], references: [id])
+
+  @@id([user_id, station_id])
 }

@@ -4,10 +4,10 @@ const prisma = new PrismaClient();
 class ReviewService {
   constructor(review) {
     this.review = review;
-    this.postReview = this.postReview.bind(this);
+    this.addReview = this.addReview.bind(this);
   }
 
-  async postReview(reviewInfo) {
+  async addReview(reviewInfo) {
     const newReview = await this.review.create({ data: reviewInfo });
     return newReview;
   }
