@@ -12,10 +12,10 @@ reviewRouter.post("/review", async (req, res, next) => {
       error.status(400);
       throw error;
     }
-    const { author, station, body } = req.body;
-    const newReview = await reviewService.postReview({
-      author,
-      station,
+    const { user_id, station_id, body } = req.body;
+    const newReview = await reviewService.addReview({
+      user_id,
+      station_id,
       body,
     });
     res.status(201).json(newReview);
@@ -24,4 +24,4 @@ reviewRouter.post("/review", async (req, res, next) => {
   }
 });
 
-export default reviewRouter;
+export { reviewRouter };

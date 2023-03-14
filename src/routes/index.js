@@ -1,3 +1,1 @@
-import reviewRouter from "./reviewRouter";
-
-export { reviewRouter };
+export * from "./reviewRouter";
