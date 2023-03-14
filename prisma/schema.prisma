@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,10 +8,34 @@ datasource db {
 }
 
 model Review {
-  id        Int      @id @default(autoincrement())
+  email     String
   author    String   @db.VarChar(20)
   station   String   @db.VarChar(20)
   body      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+}
+
+model Station {
+  stationNum Int    @id @default(autoincrement())
+  realtime   String @db.VarChar(20)
+  feeltime   String
+  station    String
+}
+
+model StationLike {
+  email      String
+  stationNum Int
+  id         Int    @id @default(autoincrement())
+  station    String
+}
+
+model User {
+  email    String
+  name     String @db.VarChar(20)
+  nickname String @db.VarChar(20)
+  password String @db.VarChar(20)
+  station  String @db.VarChar(30)
+  id       Int    @id @default(autoincrement())
 }

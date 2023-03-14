@@ -16,3 +16,4 @@ class ReviewService {
 const reviewService = new ReviewService(prisma.review);
 
 export { reviewService };
+

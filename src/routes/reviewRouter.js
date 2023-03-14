@@ -3,7 +3,8 @@ import { validationResult } from "express-validator";
 import { reviewService } from "../services";
 const reviewRouter = express.Router();
 
-// 리뷰 작성
+// 리뷰 작성 create
+// validation의 목적은 무엇인지?, 미들웨어로 한방에 해결할 수 없는지>
 reviewRouter.post("/review", async (req, res, next) => {
   try {
     const errors = validationResult(req);
@@ -23,5 +24,11 @@ reviewRouter.post("/review", async (req, res, next) => {
     next(err);
   }
 });
+
+// read - get
+
+// update - fetch
+
+// delete - del
 
 export default reviewRouter;
