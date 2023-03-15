@@ -41,4 +41,13 @@ userRouter.post("/login", async (req, res, next) => {
   }
 });
 
+userRouter.delete("/logout", isUser, async (req, res, next) => {
+  try {
+    res.clearCookie("token");
+    res.status(200).json("로그아웃하였습니다.");
+  } catch (err) {
+    next(err);
+  }
+});
+
 export { userRouter };
