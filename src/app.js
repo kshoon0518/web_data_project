@@ -1,6 +1,7 @@
 // 라이브러리 임포트
 import express from "express";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 // express 서버 환경 설정
 const app = express();
@@ -20,6 +21,7 @@ import { userRouter, stationRouter, adminRouter } from "./routes";
 // 미들웨어 등록
 app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_PARSER_KEY));
+app.use(cors());
 // ---------
 
 // 라우터 등록
