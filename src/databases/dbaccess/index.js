@@ -1,4 +1,1 @@
-
-import StationAccess from "./stationAccess"
-
-export default StationAccess;
+export * from "./userAccess";

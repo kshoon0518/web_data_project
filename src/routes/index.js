@@ -1,4 +1,2 @@
-import reviewRouter from "./reviewRouter";
-import stationRouter from "./stationRouter";
-
-export { reviewRouter, stationRouter };
+export * from "./reviewRouter";
+export * from "./userRouter";
