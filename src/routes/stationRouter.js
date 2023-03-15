@@ -5,17 +5,17 @@ const stationRouter = express.Router();
 stationRouter.post("/station", async (req, res, next) => {
   try {
     // 요청 바디에서 필요한 내용 확인
-    const { station_line, station_name } = req.body;
+    const dataStation = req.body;
+    console.log(dataStation);
 
-    if (!station_line || !station_name) {
-      console.error("req.body에 정보가 없음");
-      throw new Error("req.body가 없습니다.");
-    }
+    // if (!station_line || !station_name) {
+    //   console.error("req.body에 정보가 없음");
+    //   throw new Error("req.body가 없습니다.");
+    // }
 
     // station을 생성하는 서비스 로직으로 전달
     const newStation = await stationService.postStation({
-      station_line,
-      station_name,
+      ...dataStation,
     });
 
     // 결과값 응답 회신
