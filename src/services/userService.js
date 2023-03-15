@@ -4,15 +4,15 @@ const prisma = new PrismaClient();
 class UserService {
   constructor(user) {
     this.user = user;
-    this.addUser = this.addUser.bind(this);
+    this.createUser = this.createUser.bind(this);
   }
 
-  async addUser(userInfo) {
+  //user 생성함수
+  async createUser(userInfo) {
     const newUser = await this.user.create({ data: userInfo });
-    return newUser;
+    return newUser != null ? true : false;
   }
 }
 
-const userService = new userService(prisma.user);
-
+const userService = new UserService(prisma.user);
 export { userService };

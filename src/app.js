@@ -13,8 +13,7 @@ app.listen(port, () => {
 // ---------
 
 // 라우터 임포트
-import { reviewRouter } from "./routes";
-
+import { reviewRouter, userRouter } from "./routes";
 // ---------
 
 // 미들웨어 등록
@@ -24,6 +23,7 @@ app.use(express.json());
 
 // 라우터 등록
 app.use("/", reviewRouter);
+app.use("/", userRouter);
 
 // ---------
 
