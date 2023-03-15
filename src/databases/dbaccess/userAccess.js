@@ -1,5 +1,7 @@
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+// import { PrismaClient } from "@prisma/client";
+// const prisma = new PrismaClient();
+
+import { prisma } from "./index.js";
 
 const userAccess = {
   async userCreate(userInfo) {
