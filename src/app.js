@@ -14,7 +14,7 @@ app.listen(port, () => {
 // ---------
 
 // 라우터 임포트
-import { userRouter, stationRouter } from "./routes";
+import { userRouter, stationRouter, wishRouter } from "./routes";
 // ---------
 
 // 미들웨어 등록
@@ -25,6 +25,7 @@ app.use(cookieParser(process.env.COOKIE_PARSER_KEY));
 // 라우터 등록
 app.use("/", userRouter);
 app.use("/", stationRouter);
+app.use("/", wishRouter);
 // ---------
 
 // 에러처리 미들웨어

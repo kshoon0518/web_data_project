@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { userAccess } from "../databases/dbaccess";
 
+// 쿠키를 확인하여 res.user_id에 사용자의 id를 담아 반환.
 const isUser = async (req, res, next) => {
   try {
     // 쿠키가 없는 경우
