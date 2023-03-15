@@ -6,7 +6,7 @@ const userRouter = express.Router();
 userRouter.post("/register", async (req, res, next) => {
   try {
     const { email, name, nickname, password } = req.body;
-    const isSuccess = await userService.createUser({
+    await userService.createUser({
       email,
       name,
       nickname,
@@ -65,6 +65,18 @@ userRouter.patch("/account", isUser, async (req, res, next) => {
     } else {
       res.status(400).json("잘못된 정보로 요청하셨습니다.");
     }
+  } catch (err) {
+    next(err);
+  }
+});
+
+userRouter.delete("/account", isUser, async (req, res, next) => {
+  try {
+    const userId = req.user_id;
+    const { password } = req.body;
+    await userService.softDeleteUser(userId, password);
+    res.clearCookie("token");
+    res.status(200).json("삭제 완료");
   } catch (err) {
     next(err);
   }

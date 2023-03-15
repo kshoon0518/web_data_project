@@ -33,7 +33,7 @@ const userAccess = {
         password: true,
       },
     });
-    return user;
+    return user.password;
   },
 
   async userUpdate(userId, userInfo) {
@@ -42,6 +42,13 @@ const userAccess = {
       data: userInfo,
     });
     return userUpdate ? true : false;
+  },
+
+  async userDeleteById(userId) {
+    const userDeletion = await prisma.user.update({
+      where: { id: userId },
+      data: { deletedAt: new Date() },
+    });
   },
 };
 
