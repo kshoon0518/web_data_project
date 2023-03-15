@@ -4,3 +4,4 @@ const prisma = new PrismaClient();
 export { prisma };
 export * from "./userAccess";
 export * from "./stationAccess";
+export * from "./adminAccess";
