@@ -1,16 +1,43 @@
 import express from "express";
 import { userService } from "../services";
-
 const userRouter = express.Router();
+
 userRouter.post("/register", async (req, res, next) => {
-  const { email, name, nickname, password } = req.body;
-  const newUser = await userService.createUser({
-    email,
-    name,
-    nickname,
-    password,
-  });
-  res.status(201).json(newUser);
+  try {
+    const { email, name, nickname, password } = req.body;
+    const newUser = await userService.createUser({
+      email,
+      name,
+      nickname,
+      password,
+    });
+    const isSuccess =
+      newUser != null
+        ? "회원가입에 성공하였습니다."
+        : "회원가입에 실패하였습니다.";
+    console.log(isSuccess);
+    res.status(201).json(isSuccess);
+  } catch (err) {
+    next(err);
+  }
+});
+
+userRouter.post("/login", async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const token = await userService.login({ email, password });
+    const isSuccess =
+      token != null ? "로그인에 성공하였습니다." : "로그인에 실패하였습니다.";
+    console.log(isSuccess);
+    res.cookie("token", token, {
+      maxAge: 3600000,
+      httpOnly: true,
+      signed: true,
+    });
+    res.status(201).json("쿠키가 설정되었습니다.");
+  } catch (err) {
+    next(err);
+  }
 });
 
 export { userRouter };

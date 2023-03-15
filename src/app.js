@@ -1,5 +1,6 @@
 // 라이브러리 임포트
 import express from "express";
+import cookieParser from "cookie-parser";
 
 // express 서버 환경 설정
 const app = express();
@@ -18,7 +19,7 @@ import { reviewRouter, userRouter } from "./routes";
 
 // 미들웨어 등록
 app.use(express.json());
-
+app.use(cookieParser(process.env.COOKIE_PARSER_KEY));
 // ---------
 
 // 라우터 등록
