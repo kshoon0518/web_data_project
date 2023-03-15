@@ -19,7 +19,7 @@ stationRouter.post("/station", async (req, res, next) => {
     });
 
     // 결과값 응답 회신
-    res.status().json(newStation);
+    res.status(200).json(newStation);
   } catch (err) {
     next(err);
   }
@@ -36,10 +36,10 @@ stationRouter.get("/station/:station_id", async (req, res, next) => {
     }
 
     // station 정보를 검색하는 서비스 로직으로 전달
-    const dataStation = await stationService.findStation({ station_id });
+    const dataStation = await stationService.findStation({ id: station_id });
 
     // 검색 결과 지하철역 정보 회신
-    res.status().json(dataStation);
+    res.status(200).json(dataStation);
   } catch (err) {
     next(err);
   }
