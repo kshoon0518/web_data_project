@@ -5,3 +5,4 @@ export { prisma };
 export * from "./userAccess";
 export * from "./stationAccess";
 export * from "./wishAccess";
+export * from "./adminAccess";
