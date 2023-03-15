@@ -1,4 +1,5 @@
 import express from "express";
+import { isUser } from "../middlewares/isUser";
 import { userService } from "../services";
 const userRouter = express.Router();
 
@@ -34,7 +35,7 @@ userRouter.post("/login", async (req, res, next) => {
       httpOnly: true,
       signed: true,
     });
-    res.status(201).json("쿠키가 설정되었습니다.");
+    res.status(200).json(isSuccess);
   } catch (err) {
     next(err);
   }
