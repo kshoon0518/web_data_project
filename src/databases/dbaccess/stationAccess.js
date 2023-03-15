@@ -1,7 +1,4 @@
-// import { PrismaClient } from "@prisma/client";
-// const prisma = new PrismaClient();
-
-import { prisma } from "./index.js";
+import { prisma } from "./";
 
 const stationAccess = {
   // 지하철역 생성 create
@@ -16,7 +13,7 @@ const stationAccess = {
   // 지하철역 정보 검색 findUnique
   async stationFindUnique(stationId) {
     const foundStation = await prisma.station.findUnique({
-      where: { stationId },
+      where: stationId,
     });
 
     // 검색한 지하철 데이터 반환
