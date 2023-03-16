@@ -2,9 +2,9 @@ import { prisma } from "./";
 
 const wishAccess = {
   // station_id, user_id, id(wish) 모두를 기준으로 검색할 수 있도록
-  async wishFindMany(Id) {
+  async wishFindMany(findInfo) {
     const foundWishList = await prisma.wishList.findMany({
-      where: Id,
+      where: findInfo,
     });
 
     // 검색한 목록 반환
@@ -32,15 +32,16 @@ const wishAccess = {
 
   // 찜 내역 생성
   async wishCreate(wishInfo) {
-    const newWish = await prisma.wishList.create(wishInfo);
+    const newWish = await prisma.wishList.create({ data: wishInfo });
 
     // 생성한 찜 내역 반환
     return newWish;
   },
 
   // id 값 기준으로 찜 내역 삭제
-  async wishDelete(id) {
-    await prisma.wishList.delete(id);
+  async wishDelete(deleteInfo) {
+    console.log(deleteInfo);
+    await prisma.wishList.deleteMany({ where: deleteInfo });
     return;
   },
 };

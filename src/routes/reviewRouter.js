@@ -26,20 +26,20 @@ reviewRouter.post("/review/:station_id", isUser, async (req, res, next) => {
 });
 
 // 리뷰 불러오기
-reviewRouter.get("/review/:station_id", async (req, res, next) => {
+reviewRouter.get("/review", isUser, async (req, res, next) => {
   try {
-    const { station_id } = req.params;
-    const newReview = await reviewService.readStationReview(station_id);
+    const user_id = req.user_id;
+    const newReview = await reviewService.readIdReview(user_id);
     res.status(200).json(newReview);
   } catch (err) {
     next(err);
   }
 });
 
-reviewRouter.get("/review", isUser, async (req, res, next) => {
+reviewRouter.get("/review/:station_id", async (req, res, next) => {
   try {
-    const user_id = req.user_id;
-    const newReview = await reviewService.readIdReview(user_id);
+    const { station_id } = req.params;
+    const newReview = await reviewService.readStationReview(station_id);
     res.status(200).json(newReview);
   } catch (err) {
     next(err);
