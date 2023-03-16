@@ -4,7 +4,7 @@
   "description": "2팀 백엔드",
   "main": "app.js",
   "scripts": {
-    "test": "nodemon --experimental-specifier-resolution=node src/app.js",
+    "dev": "nodemon --experimental-specifier-resolution=node src/app.js",
     "db": "npx prisma studio"
   },
   "type": "module",

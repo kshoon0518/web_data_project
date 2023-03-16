@@ -23,11 +23,10 @@ const wishService = {
     const foundStationWishList = await wishAccess.wishFindMany({
       station_id: wishInfo.station_id,
     });
-    const stationWishCount = foundStationWishList.keys().length;
+    const stationWishCount = foundStationWishList.length;
 
-    const foundUserWish = await wishAccess.wishFindUnique(wishInfo);
-    const wish_id = foundUserWish.id;
-
+    const foundUserWish = await wishAccess.wishFindMany(wishInfo);
+    const wish_id = foundUserWish[0].id;
     return { stationWishCount, wish_id };
   },
 

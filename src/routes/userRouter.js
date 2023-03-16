@@ -21,13 +21,24 @@ userRouter.post("/register", async (req, res, next) => {
 userRouter.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const token = await userService.login({ email, password });
+    const loginResult = await userService.login({ email, password });
+    const { token, isAdmin } = loginResult;
     res.cookie("token", token, {
       maxAge: 3600000,
       httpOnly: true,
       signed: true,
     });
-    res.status(200).json("로그인에 성공하였습니다.");
+    if (isAdmin) {
+      res.status(200).json({
+        message: "(관리자)로그인에 성공하였습니다.",
+        isAdmin: isAdmin,
+      });
+    } else {
+      res.status(200).json({
+        message: "(사용자)로그인에 성공하였습니다.",
+        isAdmin: isAdmin,
+      });
+    }
   } catch (err) {
     next(err);
   }

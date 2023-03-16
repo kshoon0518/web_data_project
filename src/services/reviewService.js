@@ -10,6 +10,7 @@ const reviewService = {
     const callStationReview = await reviewAccess.reviewFindByStationId(
       station_id,
     );
+    console.log(callStationReview);
     return callStationReview;
   },
 
