@@ -1,4 +1,4 @@
-import { wishAccess } from "../services";
+import { wishAccess } from "../databases/dbaccess";
 
 const wishService = {
   // user의 찜 내역을 검색 서비스
@@ -7,9 +7,9 @@ const wishService = {
 
     // db엑세스로 찜을 검색할 유저의 id를 전달
     const foundWishList = await wishAccess.wishFindMany(userId);
-    if (!foundWishList) {
-      throw new Error("사용자의 찜 내역이 없습니다.");
-    }
+    // if (!foundWishList) {
+    //   throw new Error("사용자의 찜 내역이 없습니다.");
+    // }
 
     // 검색한 유저의 찜 목록을 반환
     return foundWishList;
@@ -59,7 +59,7 @@ const wishService = {
 
     await wishAccess.wishDelete(id);
 
-    retrun;
+    return;
   },
 };
 

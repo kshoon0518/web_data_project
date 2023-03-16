@@ -3,7 +3,6 @@ import { prisma } from "./";
 const stationAccess = {
   // 지하철역 생성 create
   async stationCreate(stationInfo) {
-    console.log(stationInfo);
     const newStation = await prisma.station.create({ data: stationInfo });
 
     // 생성한 지하철 정보 반환

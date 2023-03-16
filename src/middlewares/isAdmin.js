@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { userAccess } from "../databases/dbaccess";
 
+// 관리자 권한의 API에 접근시 쿠키와 계정 정보를 확인하여 사전 차단 혹은 인가 하는 미들웨어
 const isAdmin = async (req, res, next) => {
   try {
     // 쿠키가 없는 경우

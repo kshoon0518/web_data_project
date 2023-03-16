@@ -1,11 +1,11 @@
 import express from "express";
-import { wishService } from "../services";
 import jwt from "jsonwebtoken";
-
-const wishRouter = express.Router;
+import { isUser } from "../middlewares";
+import { wishService } from "../services";
+const wishRouter = express.Router();
 
 // 마이페이지에서 사용자가 찜 목록 접근시
-wishRouter.get("/wish", isUser(), async (req, res, next) => {
+wishRouter.get("/wish", isUser, async (req, res, next) => {
   try {
     // 사용자의 id 확인
     const user_id = req.user_id;
@@ -26,7 +26,7 @@ wishRouter.get("/wish", isUser(), async (req, res, next) => {
 wishRouter.get("/wish/:station_id", async (req, res, next) => {
   try {
     // 파라미터 값 확인
-    const station_id = req.params;
+    const { station_id } = req.params;
     if (station_id === ":station_id") {
       console.error("req.params에 station_id가 없음");
       throw new Error("req.params가 없습니다.");
@@ -64,10 +64,10 @@ wishRouter.get("/wish/:station_id", async (req, res, next) => {
 });
 
 // 지하철 역 정보 페이지에서 찜 추가 버튼 클릭시
-wishRouter.post("/wish/:station_id", isUser(), async (req, res, next) => {
+wishRouter.post("/wish/:station_id", isUser, async (req, res, next) => {
   try {
     // 파라미터 값 확인
-    const station_id = req.params;
+    const { station_id } = req.params;
     if (station_id === ":station_id") {
       console.error("req.params에 station_id가 없음");
       throw new Error("req.params가 없습니다.");
@@ -86,7 +86,7 @@ wishRouter.post("/wish/:station_id", isUser(), async (req, res, next) => {
 });
 
 // 찜 제거, 취소 (마이페이지)
-wishRouter.delete("/wish/:wish_id", isUser(), async (req, res, next) => {
+wishRouter.delete("/wish/:wish_id", isUser, async (req, res, next) => {
   try {
     const wish_id = req.params;
     if (wish_id === ":wish_id") {
@@ -98,11 +98,13 @@ wishRouter.delete("/wish/:wish_id", isUser(), async (req, res, next) => {
     await wishService.deleteWish(wish_id);
 
     res.status(200).end();
-  } catch (err) {}
+  } catch (err) {
+    next(err);
+  }
 });
 
 // 찜 제거, 취소 (지하철 역 정보 페이지)
-wishRouter.delete("/wish/:station_id", isUser(), async (req, res, next) => {
+wishRouter.delete("/wish/:station_id", isUser, async (req, res, next) => {
   try {
     const station_id = req.params;
     if (station_id === ":station_id") {
@@ -114,7 +116,9 @@ wishRouter.delete("/wish/:station_id", isUser(), async (req, res, next) => {
     await wishService.deleteWish(station_id);
 
     res.status(200).end();
-  } catch (err) {}
+  } catch (err) {
+    next(err);
+  }
 });
 
 export { wishRouter };
