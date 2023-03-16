@@ -15,7 +15,8 @@ app.listen(port, () => {
 // ---------
 
 // 라우터 임포트
-import { userRouter, stationRouter, wishRouter, adminRouter } from "./routes";
+import { userRouter, stationRouter, adminRouter, wishRouter } from "./routes";
+
 // ---------
 
 // 미들웨어 등록
