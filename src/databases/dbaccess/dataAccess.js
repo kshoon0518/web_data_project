@@ -10,7 +10,7 @@ const dataAccess = {
       //   "../data/stationData.csv",
       "utf8",
     );
-    const line = parse(data); // [ '', '지하철역명', '노선명', 'X좌표값', 'Y좌표값' ],
+    const line = parse(data); // [ '', '�??��철역�?', '?��?���?', 'X좌표�?', 'Y좌표�?' ],
     line.shift();
 
     for (let row of line) {
@@ -36,6 +36,19 @@ const dataAccess = {
     }
 
     return;
+  },
+
+  async dataTravelTimeCreate() {
+    const data = fs.readFileSync("../data/travel_time.csv", "utf-8");
+    console.log(data);
+
+    // const line = parse(data);
+    // line.shift();
+
+    // for (let row of line) {
+    //   console.log(row);
+    // }
+    return data;
   },
 };
 
