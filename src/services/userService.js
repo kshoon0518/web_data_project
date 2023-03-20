@@ -31,7 +31,7 @@ const userService = {
         expiresIn: "1h",
       },
     );
-    return token;
+    return { token: token, isAdmin: user.isAdmin };
   },
 
   async getUserInfo(userId) {

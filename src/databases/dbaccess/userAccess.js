@@ -15,6 +15,7 @@ const userAccess = {
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: {
+        isAdmin: true,
         email: true,
         name: true,
         nickname: true,

@@ -4,7 +4,7 @@ const adminAccess = {
   async adminFindAllUser() {
     const userList = prisma.user.findMany({
       select: {
-        id: false,
+        id: true,
         email: true,
         name: true,
         nickname: true,
@@ -36,7 +36,7 @@ const adminAccess = {
   async adminFindAllReview() {
     const reviewList = await prisma.review.findMany({
       select: {
-        id: false,
+        id: true,
         user_id: false,
         station_id: false,
         user: {
