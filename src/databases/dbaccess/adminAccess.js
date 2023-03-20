@@ -37,8 +37,8 @@ const adminAccess = {
     const reviewList = await prisma.review.findMany({
       select: {
         id: true,
-        user_id: false,
-        station_id: false,
+        user_id: true,
+        station_id: true,
         user: {
           select: {
             email: true,
