@@ -26,6 +26,8 @@ model Station {
   station_line String     @db.VarChar(10)
   station_name String     @db.VarChar(30)
   area         String?    @db.VarChar(20)
+  rent_price   Int
+  lease_price  Int
   pos_x        String     @db.VarChar(40)
   pos_y        String     @db.VarChar(40)
   Review       Review[]
@@ -33,9 +35,16 @@ model Station {
 }
 
 model TravelTime {
-  id          String @id @unique @default(uuid())
-  station_id  Json
-  travel_time Int
+  id                  String @id @unique @default(uuid())
+  station_dep_id      String
+  station_arv_id      String
+  travel_time         Int
+  feel_time_weekday_m Int
+  feel_time_weekday_d Int
+  feel_time_weekday_n Int
+  feel_time_weekend_m Int
+  feel_time_weekend_d Int
+  feel_time_weekend_n Int
 }
 
 model Review {
