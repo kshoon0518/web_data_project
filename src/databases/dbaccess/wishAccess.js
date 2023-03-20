@@ -32,7 +32,7 @@ const wishAccess = {
 
   // 찜 내역 생성
   async wishCreate(wishInfo) {
-    const newWish = await prisma.wishList.create(wishInfo);
+    const newWish = await prisma.wishList.create({ data: wishInfo });
 
     // 생성한 찜 내역 반환
     return newWish;
