@@ -12,37 +12,9 @@ const dataAccess = {
     );
     const line = parse(data); // [ '', '지하철역명', '노선명', 'X좌표값', 'Y좌표값' ],
     line.shift();
-    console.log(line[0]);
-
-    // const [
-    //   index,
-    //   station_name,
-    //   station_line,
-    //   pos_x,
-    //   pos_y,
-    //   rent_price,
-    //   lease_price,
-    // ] = line[0];
-
-    // console.log(typeof Number(rent_price));
-    // const newData = await prisma.station.create({
-    //   data: {
-    //     station_name,
-    //     station_line,
-    //     area: "",
-    //     pos_x,
-    //     pos_y,
-    //     rent_price: 1,
-    //     lease_price: 2,
-    //     // rent_price: rent_price,
-    //     // lease_price: lease_price,
-    //   },
-    // });
-    // console.log(newData);
 
     for (let row of line) {
       const [
-        index,
         station_name,
         station_line,
         pos_x,
