@@ -3,3 +3,4 @@ export * from "./stationService";
 export * from "./wishService";
 export * from "./adminService";
 export * from "./reviewService";
+export * from "./dataService";
