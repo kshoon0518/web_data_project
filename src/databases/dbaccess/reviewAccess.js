@@ -10,6 +10,25 @@ const reviewAccess = {
   async reviewFindByStationId(station_id) {
     const callStationReview = await prisma.review.findMany({
       where: { station_id: station_id },
+      select: {
+        body: true,
+        createdAt: true,
+        updatedAt: true,
+        deletedAt: true,
+        id: true,
+        station: {
+          select: {
+            id: true,
+            station_name: true,
+            station_line: true,
+          },
+        },
+        user: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
     return callStationReview;
   },
@@ -17,6 +36,25 @@ const reviewAccess = {
   async reviewFindByUserId(user_id) {
     const callIdReview = await prisma.review.findMany({
       where: { user_id: user_id },
+      select: {
+        body: true,
+        createdAt: true,
+        updatedAt: true,
+        deletedAt: true,
+        id: true,
+        station: {
+          select: {
+            id: true,
+            station_name: true,
+            station_line: true,
+          },
+        },
+        user: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
     return callIdReview;
   },

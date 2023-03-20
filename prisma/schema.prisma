@@ -28,6 +28,8 @@ model Station {
   area         String?    @db.VarChar(20)
   rent_price   Int
   lease_price  Int
+  rent_price   Int
+  lease_price  Int
   pos_x        String     @db.VarChar(40)
   pos_y        String     @db.VarChar(40)
   Review       Review[]
