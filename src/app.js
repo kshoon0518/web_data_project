@@ -21,6 +21,7 @@ import {
   adminRouter,
   wishRouter,
   reviewRouter,
+  dataRouter,
 } from "./routes";
 
 // ---------
@@ -49,7 +50,7 @@ app.use("/", stationRouter);
 app.use("/wish", wishRouter);
 app.use("/admin", adminRouter);
 app.use("/", reviewRouter);
-
+app.use("/data", dataRouter);
 // ---------
 
 // 에러처리 미들웨어
