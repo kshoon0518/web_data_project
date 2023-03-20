@@ -1,90 +1,50 @@
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
+import { socialloginRouterAccess } from "../databases/dbaccess";
 
-dotenv.config();
+const socialloginService = {
+  async loginKakaoUser(kakaouserInfo) {
+    const isSuccess = await kakaouserAccess.kakaouserCreate(kakaouserInfo);
+    return isSuccess;
+  },
+};
 
-const generateToken = member => {
-  return new Promise((resolve, reject) => {
-    jwt.sign(
-      {
-        id: member.id,
-        user_id: member.user_id,
-        nickname: member.nickname,
-      },
-      process.env.SECRET,
-      {
-        expiresIn: "id",
-      },
-      (err, token) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(token);
-        }
-      },
-    );
+const {
+  data: { access_token: kakaoAccessToken },
+} = await axios("https://kauth.kakao.com/oauth/token", {
+  params: {
+    grant_type: "authorization_code",
+    client_id: "b5fed7f18075803554956c416973bb45",
+    redirect_uri: " http://localhost:8001/auth/oauth?platform=kakao",
+    code: code,
+  },
+}); //액세스 토큰을 받아온다
+
+const { data: kakaoUser } = await axios("https://kapi.kakao.com/v2/user/me", {
+  headers: {
+    Authorization: `Bearer ${kakaoAccessToken}`,
+  },
+}); //유저 정보를 받아온다
+
+let existingMember = null;
+existingMember = await member.findOne({
+  where: {
+    id: kakaoUser.id,
+  },
+});
+
+if (existingMember === null) {
+  const newMember = await member.create({
+    id: kakaoUser.id,
+    name: kakaoUser.kakao_account.name,
+    nickname: kakaoUser.properties.nickname,
+    email: kakaoUser.kakao_account.email || null,
+    platform: "kakao",
   });
-};
 
-export { generateToken };
+  const accessToken = await generateToken(newMember);
+} else {
+  const accessToken = await generateToken(existingMember);
+}
 
-const loginWithKakao = async (req, res) => {
-  const { code } = req.query; //쿼리로 인가코드를 받아옴
-
-  try {
-    const {
-      data: { access_token: kakaoAccessToken },
-    } = await axios("https://kauth.kakao.com/oauth/token", {
-      params: {
-        grant_type: "authorization_code",
-        client_id: process.env.KAKAO_REST_API_KEY,
-        redirect_uri: process.env.KAKAO_REDIRECT_URI + "?platform=kakao",
-        code: code,
-      },
-    }); //액세스 토큰을 받아온다
-
-    const { data: kakaoUser } = await axios(
-      "https://kapi.kakao.com/v2/user/me",
-      {
-        headers: {
-          Authorization: `Bearer ${kakaoAccessToken}`,
-        },
-      },
-    ); //유저 정보를 받아온다
-
-    let existingMember = null;
-    existingMember = await member.findOne({
-      where: {
-        user_id: kakaoUser.id,
-      },
-    });
-
-    if (existingMember === null) {
-      const newMember = await member.create({
-        user_id: kakaoUser.id,
-        nickname: kakaoUser.properties.nickname,
-        profile_image: kakaoUser.properties.profile_image,
-        email: kakaoUser.kakao_account.email || null,
-        platform: "kakao",
-      });
-
-      const accessToken = await generateToken(newMember);
-      res.json({
-        success: true,
-        accessToken,
-      });
-    } else {
-      const accessToken = await generateToken(existingMember);
-      res.json({
-        success: true,
-        accessToken,
-      });
-    }
-  } catch (err) {
-    res.status(403).json({
-      message: err.message,
-    });
-  }
-};
-
-export { loginWithKakao };
+return { accessToken };
