@@ -8,3 +8,4 @@ export * from "./wishAccess";
 export * from "./adminAccess";
 export * from "./reviewAccess";
 export * from "./dataAccess";
+export * from "./mainAccess";

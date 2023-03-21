@@ -11,4 +11,13 @@ dataRouter.get("/station_data", async (req, res, next) => {
   }
 });
 
+dataRouter.get("/travel_time", async (req, res, next) => {
+  try {
+    const data = await dataService.dataTravelTimeCreate();
+    res.json({ message: ` ${data}개 데이터 입력완료` });
+  } catch (err) {
+    next(err);
+  }
+});
+
 export { dataRouter };
