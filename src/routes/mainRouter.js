@@ -15,4 +15,17 @@ mainRouter.post("/station", async (req, res, next) => {
   }
 });
 
+mainRouter.post("/stationWithin", async (req, res, next) => {
+  try {
+    const { stationId, range } = req.body;
+    const stationList = await mainService.findStationWithin(stationId, range);
+    res.status(200).json({
+      message: "범위 내의 지하철역 조회에 성공했습니다.",
+      stationList: stationList,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 export { mainRouter };
