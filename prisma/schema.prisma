@@ -36,15 +36,15 @@ model Station {
 
 model TravelTime {
   id                  String @id @unique @default(uuid())
-  station_dep_id      String
-  station_arv_id      String
   travel_time         Int
-  feel_time_weekday_m Int
   feel_time_weekday_d Int
+  feel_time_weekday_m Int
   feel_time_weekday_n Int
-  feel_time_weekend_m Int
   feel_time_weekend_d Int
+  feel_time_weekend_m Int
   feel_time_weekend_n Int
+  station_arv_id      String
+  station_dep_id      String
 }
 
 model Review {
