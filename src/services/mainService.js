@@ -36,6 +36,7 @@ const mainService = {
         id: stationId,
         station: {
           station_name: firstDep.station_name,
+          station_line: firstDep.station_line,
           pos_x: firstDep.pos_x,
           pos_y: firstDep.pos_y,
           rent_price: firstDep.rent_price,
