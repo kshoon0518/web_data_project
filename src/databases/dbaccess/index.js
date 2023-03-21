@@ -9,3 +9,4 @@ export * from "./adminAccess";
 export * from "./reviewAccess";
 export * from "./dataAccess";
 export * from "./mainAccess";
+export * from "./kakaologinAccess";
