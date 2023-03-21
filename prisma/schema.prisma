@@ -22,20 +22,22 @@ model User {
 }
 
 model Station {
-  id           String     @id @unique @default(uuid())
-  station_name String     @db.VarChar(10)
-  station_line String     @db.VarChar(30)
-  area         String?    @db.VarChar(20)
-  rent_price   Int
-  lease_price  Int
-  pos_x        String     @db.VarChar(40)
-  pos_y        String     @db.VarChar(40)
-  Review       Review[]
-  WishList     WishList[]
+  id             String       @id @unique @default(uuid())
+  station_name   String       @db.VarChar(30)
+  station_line   String       @db.VarChar(10)
+  area           String?      @db.VarChar(20)
+  rent_price     Int
+  lease_price    Int
+  pos_x          String       @db.VarChar(40)
+  pos_y          String       @db.VarChar(40)
+  Review         Review[]
+  WishList       WishList[]
+  TravelTime_arv TravelTime[] @relation("TravelTime_arv")
+  TravelTime_dep TravelTime[] @relation("TravelTime_dep")
 }
 
 model TravelTime {
-  id                  String @id @unique @default(uuid())
+  id                  String  @id @unique @default(uuid())
   travel_time         Int
   feel_time_weekday_d Int
   feel_time_weekday_m Int
@@ -45,6 +47,8 @@ model TravelTime {
   feel_time_weekend_n Int
   station_arv_id      String
   station_dep_id      String
+  station_arv         Station @relation("TravelTime_arv", fields: [station_arv_id], references: [id])
+  station_dep         Station @relation("TravelTime_dep", fields: [station_dep_id], references: [id])
 }
 
 model Review {

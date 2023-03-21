@@ -1,7 +1,7 @@
 import { prisma } from "./";
 
 const mainAccess = {
-  async findStationPos() {
+  async mainFindStationPos() {
     const stationList = await prisma.station.findMany({
       select: {
         id: true,
@@ -17,13 +17,40 @@ const mainAccess = {
     return stationList;
   },
 
-  async stationFindById(stationId) {
+  async mainStationFindById(stationId) {
     const station = await prisma.station.findUnique({
       where: { id: stationId },
     });
 
-    // 검색한 지하철 데이터 반환
     return station;
+  },
+
+  async mainFindTravelTime() {
+    const travelTime = await prisma.travelTime.findMany({
+      select: {
+        id: true,
+        travel_time: true,
+        feel_time_weekday_d: true,
+        feel_time_weekday_m: true,
+        feel_time_weekday_n: true,
+        feel_time_weekend_d: true,
+        feel_time_weekend_m: true,
+        feel_time_weekend_n: true,
+        station_arv_id: true,
+        station_dep_id: true,
+        station_arv: {
+          select: {
+            station_name: true,
+            station_line: true,
+            pos_x: true,
+            pos_y: true,
+            rent_price: true,
+            lease_price: true,
+          },
+        },
+      },
+    });
+    return travelTime;
   },
 };
 export { mainAccess };

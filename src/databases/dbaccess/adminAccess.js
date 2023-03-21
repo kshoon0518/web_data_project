@@ -14,6 +14,9 @@ const adminAccess = {
         updatedAt: true,
         deletedAt: true,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
     return userList;
   },
@@ -56,6 +59,9 @@ const adminAccess = {
         createdAt: true,
         updatedAt: true,
         deletedAt: true,
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
     return reviewList;
