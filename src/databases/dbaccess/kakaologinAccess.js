@@ -2,8 +2,10 @@ import { prisma } from "./";
 
 const kakaologinAccess = {
   async kakaouserCreate(kakaouserInfo) {
-    const newkakaoUser = await prisma.user.create({ data: kakaouserInfo });
-    return newkakaoUser ? true : false;
+    const findkakaoUser = await prisma.user.findOne({
+      where: { kakaouserInfo },
+    });
+    return findkakaoUser ? true : false;
   },
 };
 

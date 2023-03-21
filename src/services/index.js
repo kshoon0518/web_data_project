@@ -5,3 +5,4 @@ export * from "./adminService";
 export * from "./reviewService";
 export * from "./dataService";
 export * from "./mainService";
+export * from "./kakaologinService";
