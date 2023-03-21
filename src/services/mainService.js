@@ -21,14 +21,22 @@ const mainService = {
     return nearStation;
   },
 
-  async findStationWithin(stationId, range) {
+  async findStationWithin(
+    stationId,
+    time_min,
+    time_max,
+    type,
+    price_min,
+    price_max,
+  ) {
     const travelTime = await mainAccess.mainFindTravelTime();
     const firstDep = await mainAccess.mainStationFindById(stationId);
-    const minTime = [
+    const clacTime = [
       {
         id: stationId,
         station: {
           station_name: firstDep.station_name,
+          station_line: firstDep.station_line,
           pos_x: firstDep.pos_x,
           pos_y: firstDep.pos_y,
           rent_price: firstDep.rent_price,
@@ -47,7 +55,7 @@ const mainService = {
     while (true) {
       let updated = false;
       for (let travelTimeData of travelTime) {
-        if (minTime.some(node => node.id == travelTimeData.station_dep_id)) {
+        if (clacTime.some(node => node.id == travelTimeData.station_dep_id)) {
           const {
             station_arv,
             station_dep_id,
@@ -60,8 +68,8 @@ const mainService = {
             feel_time_weekend_n,
             travel_time,
           } = travelTimeData;
-          const dep_node = minTime.find(node => node.id == station_dep_id);
-          const arv_node = minTime.find(node => node.id == station_arv_id);
+          const dep_node = clacTime.find(node => node.id == station_dep_id);
+          const arv_node = clacTime.find(node => node.id == station_arv_id);
           const arv_time = dep_node.time + travel_time;
           const ftime_dm = dep_node.dm + feel_time_weekday_m;
           const ftime_dd = dep_node.dd + feel_time_weekday_d;
@@ -70,8 +78,8 @@ const mainService = {
           const ftime_ed = dep_node.ed + feel_time_weekend_d;
           const ftime_en = dep_node.en + feel_time_weekend_n;
 
-          if (!arv_node && arv_time <= range) {
-            minTime.push({
+          if (!arv_node && arv_time <= time_max) {
+            clacTime.push({
               id: station_arv_id,
               station: station_arv,
               time: arv_time,
@@ -88,7 +96,26 @@ const mainService = {
       }
       if (!updated) break;
     }
-    return minTime;
+    const filtered = clacTime.filter(data => {
+      if (data.time < time_min) {
+        return false;
+      } else if (
+        type === "rent" &&
+        (data.station.rent_price > price_max ||
+          data.station.rent_price < price_min)
+      ) {
+        return false;
+      } else if (
+        type === "lease" &&
+        (data.station.lease_price > price_max ||
+          data.station.lease_price < price_min)
+      ) {
+        return false;
+      }
+      return true;
+    });
+
+    return filtered;
   },
 };
 

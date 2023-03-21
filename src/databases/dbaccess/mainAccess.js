@@ -41,6 +41,7 @@ const mainAccess = {
         station_arv: {
           select: {
             station_name: true,
+            station_line: true,
             pos_x: true,
             pos_y: true,
             rent_price: true,
