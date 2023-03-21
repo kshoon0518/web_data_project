@@ -23,8 +23,8 @@ model User {
 
 model Station {
   id           String     @id @unique @default(uuid())
-  station_line String     @db.VarChar(10)
-  station_name String     @db.VarChar(30)
+  station_name String     @db.VarChar(10)
+  station_line String     @db.VarChar(30)
   area         String?    @db.VarChar(20)
   rent_price   Int
   lease_price  Int
