@@ -2,7 +2,6 @@ import { prisma } from "./";
 import fs from "fs";
 import path from "path";
 import { parse } from "csv-parse/sync";
-import { fileURLToPath } from "url";
 
 const __dirname = path.resolve();
 
@@ -124,6 +123,11 @@ const dataAccess = {
   async dataPostFacilities(newData, field) {
     const createdData = prisma[field].createMany({ data: newData });
     return createdData;
+  },
+
+  async dataGetFacilities(field) {
+    const facilityDatas = prisma[field].findMany();
+    return facilityDatas;
   },
 };
 
