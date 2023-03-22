@@ -104,6 +104,31 @@ const dataAccess = {
     }
     return count;
   },
+
+  async dataReadFacilities(field) {
+    const csvPath = path.join(
+      __dirname,
+      "src",
+      "databases",
+      "data",
+      "facilities",
+      field + ".csv",
+    );
+    const csv = fs.readFileSync(csvPath, "utf-8");
+    const line = parse(csv);
+    line.shift();
+    return line;
+  },
+
+  async dataPostFacilities(newData, field) {
+    const createdData = prisma[field].createMany({ data: newData });
+    return createdData;
+  },
+
+  async dataGetFacilities(field) {
+    const facilityDatas = prisma[field].findMany();
+    return facilityDatas;
+  },
 };
 
 export { dataAccess };

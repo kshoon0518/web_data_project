@@ -12,7 +12,7 @@ const stationAccess = {
   // 지하철역 정보 검색 findUnique
   async stationFindUnique(stationId) {
     const foundStation = await prisma.station.findUnique({
-      where: stationId,
+      where: { id: stationId },
     });
 
     // 검색한 지하철 데이터 반환
