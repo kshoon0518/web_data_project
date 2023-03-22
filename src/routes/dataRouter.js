@@ -20,4 +20,13 @@ dataRouter.get("/travel_time", async (req, res, next) => {
   }
 });
 
+dataRouter.post("/station_address", async (req, res, next) => {
+  try {
+    await dataService.stationAreaUpdate();
+    res.json({ message: "area 업데이트 완료" });
+  } catch (err) {
+    next(err);
+  }
+});
+
 export { dataRouter };

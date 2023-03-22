@@ -10,6 +10,11 @@ const dataService = {
     const data = await dataAccess.dataTravelTimeCreate();
     return data;
   },
+
+  async stationAreaUpdate() {
+    const area = await dataAccess.stationAreaUpdate();
+    return area;
+  },
 };
 
 export { dataService };
