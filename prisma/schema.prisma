@@ -31,9 +31,9 @@ model Station {
   pos_x          String       @db.VarChar(40)
   pos_y          String       @db.VarChar(40)
   Review         Review[]
-  WishList       WishList[]
   TravelTime_arv TravelTime[] @relation("TravelTime_arv")
   TravelTime_dep TravelTime[] @relation("TravelTime_dep")
+  WishList       WishList[]
 }
 
 model TravelTime {
@@ -49,6 +49,9 @@ model TravelTime {
   station_dep_id      String
   station_arv         Station @relation("TravelTime_arv", fields: [station_arv_id], references: [id])
   station_dep         Station @relation("TravelTime_dep", fields: [station_dep_id], references: [id])
+
+  @@index([station_arv_id], map: "TravelTime_station_arv_id_fkey")
+  @@index([station_dep_id], map: "TravelTime_station_dep_id_fkey")
 }
 
 model Review {
@@ -76,6 +79,7 @@ model WishList {
   station    Station   @relation(fields: [station_id], references: [id])
   user       User      @relation(fields: [user_id], references: [id])
 
+  @@unique([user_id, station_id])
   @@index([station_id], map: "WishList_station_id_fkey")
   @@index([user_id], map: "WishList_user_id_fkey")
 }

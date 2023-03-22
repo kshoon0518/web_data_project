@@ -134,11 +134,12 @@ const wishAccess = {
 
   // 찜 내역 생성
   async wishCreate(wishInfo) {
-    const newWish = await prisma.wishList.create({
+    const newWish = await prisma.wishList.createMany({
       data: {
         user_id: wishInfo.userId,
         station_id: wishInfo.stationId,
       },
+      skipDuplicates: true,
     });
 
     // 생성한 찜 내역 반환
@@ -149,7 +150,6 @@ const wishAccess = {
   async wishDelete(deleteInfo) {
     console.log("deleteInfo: ", deleteInfo);
     await prisma.wishList.deleteMany({ where: deleteInfo });
-    console.log("삭제 성공?");
 
     return;
   },
