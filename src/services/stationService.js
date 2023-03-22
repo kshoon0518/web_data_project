@@ -25,10 +25,12 @@ const stationService = {
     const parks = await dataAccess.dataGetFacilities("park");
     const marts = await dataAccess.dataGetFacilities("mart");
     const cinemas = await dataAccess.dataGetFacilities("cinema");
+    const hospitals = await dataAccess.dataGetFacilities("hospital");
     const stationPos = { lat: station.pos_x, lng: station.pos_y };
     let nearParks = [];
     let nearMarts = [];
     let nearCinemas = [];
+    let nearHospitals = [];
 
     for (let park of parks) {
       const parkPos = { lat: park.pos_x, lng: park.pos_y };
@@ -51,11 +53,19 @@ const stationService = {
         nearCinemas.push({ name: cinema.name, dist: dist });
       }
     }
+    for (let hospital of hospitals) {
+      const hospitalPos = { lat: hospital.pos_x, lng: hospital.pos_y };
+      const dist = Math.round(haversine(stationPos, hospitalPos));
+      if (dist <= 1000) {
+        nearHospitals.push({ name: hospital.name, dist: dist });
+      }
+    }
 
     const facilityDatas = {
       park: nearParks,
       mart: nearMarts,
       cinemas: nearCinemas,
+      hospitals: nearHospitals,
     };
     return facilityDatas;
   },
