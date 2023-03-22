@@ -132,3 +132,17 @@ model Hospital {
   pos_x Float
   pos_y Float
 }
+
+model Hospital {
+  id    Int    @id @default(autoincrement())
+  name  String @db.VarChar(40)
+  pos_x Float
+  pos_y Float
+}
+
+model Cctv {
+  id         Int   @id @default(autoincrement())
+  camera_qty Int
+  pos_x      Float
+  pos_y      Float
+}
