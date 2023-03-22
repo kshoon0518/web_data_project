@@ -79,3 +79,24 @@ model WishList {
   @@index([station_id], map: "WishList_station_id_fkey")
   @@index([user_id], map: "WishList_user_id_fkey")
 }
+
+model Park {
+  id    Int    @id @default(autoincrement())
+  name  String @db.VarChar(40)
+  pos_x Float
+  pos_y Float
+}
+
+model Mart {
+  id    Int    @id @default(autoincrement())
+  name  String @db.VarChar(40)
+  pos_x Float
+  pos_y Float
+}
+
+model Cinema {
+  id    Int    @id @default(autoincrement())
+  name  String @db.VarChar(40)
+  pos_x Float
+  pos_y Float
+}

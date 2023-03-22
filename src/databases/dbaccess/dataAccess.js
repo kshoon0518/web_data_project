@@ -2,6 +2,7 @@ import { prisma } from "./";
 import fs from "fs";
 import path from "path";
 import { parse } from "csv-parse/sync";
+import { fileURLToPath } from "url";
 
 const __dirname = path.resolve();
 
@@ -103,6 +104,26 @@ const dataAccess = {
       }
     }
     return count;
+  },
+
+  async dataReadFacilities(field) {
+    const csvPath = path.join(
+      __dirname,
+      "src",
+      "databases",
+      "data",
+      "facilities",
+      field + ".csv",
+    );
+    const csv = fs.readFileSync(csvPath, "utf-8");
+    const line = parse(csv);
+    line.shift();
+    return line;
+  },
+
+  async dataPostFacilities(newData, field) {
+    const createdData = prisma[field].createMany({ data: newData });
+    return createdData;
   },
 };
 
