@@ -23,6 +23,7 @@ import {
   reviewRouter,
   dataRouter,
   mainRouter,
+  kakaologinRouter,
 } from "./routes";
 
 // ---------
@@ -46,6 +47,7 @@ app.use("/admin", adminRouter);
 app.use("/", reviewRouter);
 app.use("/data", dataRouter);
 app.use("/main", mainRouter);
+app.use("/", kakaologinRouter);
 // ---------
 
 // 에러처리 미들웨어

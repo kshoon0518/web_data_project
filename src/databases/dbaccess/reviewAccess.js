@@ -28,6 +28,9 @@ const reviewAccess = {
           },
         },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
     return callStationReview;
   },
@@ -53,6 +56,9 @@ const reviewAccess = {
             name: true,
           },
         },
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
     return callIdReview;
