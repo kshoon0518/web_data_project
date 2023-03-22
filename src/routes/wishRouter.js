@@ -18,7 +18,7 @@ wishRouter.get("/mypage", isUser, async (req, res, next) => {
 });
 // 지하철 역 정보 페이지에 접근할때 /wish/stationPage/:station_id
 // 특정 지하철역의 찜 목록을 조회하여 갯수를 헤아리고,
-// 로그인 상태의 사용자라면 해당 사용자의 찜 wish_id를 반환해준다(찜 버튼에 저장)
+// 로그인 상태의 사용자라면 해당 사용자의 찜 wish_id 반환
 wishRouter.get("/stationpage/:station_id", async (req, res, next) => {
   try {
     // 파라미터 값 확인
@@ -55,18 +55,15 @@ wishRouter.get("/stationpage/:station_id", async (req, res, next) => {
 // 지하철 역 정보 페이지에서 찜 추가 버튼 클릭시
 wishRouter.post("/:station_id", isUser, async (req, res, next) => {
   try {
-    // 파라미터 값 확인
     const stationId = req.params.station_id;
-    console.log(stationId);
-
-    // 사용자 id 값 확인
     const userId = req.user_id;
-    console.log(userId);
 
     // 찜 생성 서비스로 id 전달
     const newWish = await wishService.createWish({ userId, stationId });
 
-    res.status(200).json(newWish);
+    res.status(200).json({
+      message: newWish,
+    });
   } catch (err) {
     next(err);
   }

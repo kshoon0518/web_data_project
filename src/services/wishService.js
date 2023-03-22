@@ -55,7 +55,14 @@ const wishService = {
   async createWish(wishInfo) {
     console.log("wishInfo : ", wishInfo);
 
-    const newWish = await wishAccess.wishCreate(wishInfo);
+    let newWish = await wishAccess.wishCreate(wishInfo);
+
+    // count == 1 생성, == 0 중복으로 미생성
+    if (newWish.count == 0) {
+      newWish = "이미 찜 내역이 존재 합니다.";
+    } else {
+      newWish = "찜 내역을 생성하였습니다.";
+    }
 
     // 생성한 찜 내역 반환
     return newWish;
