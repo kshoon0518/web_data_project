@@ -5,7 +5,7 @@ import cors from "cors";
 
 // express 서버 환경 설정
 const app = express();
-const port = process.env.PORT || 8001;
+const port = process.env.PORT || 3001;
 
 // express 서버 열기
 app.listen(port, () => {

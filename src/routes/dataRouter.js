@@ -20,4 +20,14 @@ dataRouter.get("/travel_time", async (req, res, next) => {
   }
 });
 
+dataRouter.post("/facilities", async (req, res, next) => {
+  try {
+    const { field } = req.body;
+    const data = await dataService.dataFacilitiesCreate(field);
+    res.json({ message: ` ${data}개 데이터 입력완료` });
+  } catch (err) {
+    next(err);
+  }
+});
+
 export { dataRouter };
