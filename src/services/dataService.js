@@ -11,9 +11,19 @@ const dataService = {
     return data;
   },
 
-  async stationAreaUpdate() {
-    const area = await dataAccess.stationAreaUpdate();
-    return area;
+  async dataFacilitiesCreate(field) {
+    const datas = await dataAccess.dataReadFacilities(field);
+    const newData = [];
+    for (let data of datas) {
+      const dataObj = {
+        name: data[0],
+        pos_x: Number(data[1]),
+        pos_y: Number(data[2]),
+      };
+      newData.push(dataObj);
+    }
+    const createdData = await dataAccess.dataPostFacilities(newData, field);
+    return createdData.count;
   },
 };
 

@@ -20,10 +20,11 @@ dataRouter.get("/travel_time", async (req, res, next) => {
   }
 });
 
-dataRouter.post("/station_address", async (req, res, next) => {
+dataRouter.post("/facilities", async (req, res, next) => {
   try {
-    await dataService.stationAreaUpdate();
-    res.json({ message: "area 업데이트 완료" });
+    const { field } = req.body;
+    const data = await dataService.dataFacilitiesCreate(field);
+    res.json({ message: ` ${data}개 데이터 입력완료` });
   } catch (err) {
     next(err);
   }

@@ -33,12 +33,10 @@ app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_PARSER_KEY));
 app.use(
   cors({
-    //origin: "http://kdt-ai6-team02.elicecoding.com:3000/", // 허용할 클라이언트 주소
-    origin: "http://localhost:3000/",
+    origin: "http://kdt-ai6-team02.elicecoding.com:3000/", // 허용할 클라이언트 주소
     credentials: true, // 쿠키 전달을 허용
   }),
 );
-
 // ---------
 
 // 라우터 등록
