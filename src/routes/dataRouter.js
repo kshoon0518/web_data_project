@@ -11,6 +11,24 @@ dataRouter.get("/station_data", async (req, res, next) => {
   }
 });
 
+dataRouter.post("/station_crowdedness_startTime", async (req, res, next) => {
+  try {
+    await dataService.dataCrowdedCreate();
+    res.json({ message: "상행 혼잡도 데이터 입력완료" });
+  } catch (err) {
+    next(err);
+  }
+});
+
+dataRouter.patch("/station_crowdedness_endTime", async (req, res, next) => {
+  try {
+    await dataService.dataCrowdedUpdate();
+    res.json({ message: "하행 혼잡도 데이터 입력 완료" });
+  } catch (err) {
+    next(err);
+  }
+});
+
 dataRouter.get("/travel_time", async (req, res, next) => {
   try {
     const data = await dataService.dataTravelTimeCreate();

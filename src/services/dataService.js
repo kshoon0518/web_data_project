@@ -6,6 +6,16 @@ const dataService = {
     return;
   },
 
+  async dataCrowdedCreate() {
+    await dataAccess.dataCrowdedCreate();
+    return;
+  },
+
+  async dataCrowdedUpdate() {
+    await dataAccess.dataCrowdedUpdate();
+    return;
+  },
+
   async dataTravelTimeCreate() {
     const data = await dataAccess.dataTravelTimeCreate();
     return data;

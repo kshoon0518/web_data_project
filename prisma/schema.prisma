@@ -34,6 +34,20 @@ model Station {
   TravelTime_arv TravelTime[] @relation("TravelTime_arv")
   TravelTime_dep TravelTime[] @relation("TravelTime_dep")
   WishList       WishList[]
+  StationCrowdedness StationCrowdedness[]
+}
+
+// 출근시간 startTime, 퇴근 시간 endTime
+model StationCrowdedness {
+  id String       @id @unique @default(uuid())
+  station_id String    @db.VarChar(40)
+  startTime_upbound Int?
+  startTime_downbound Int?
+  endTime_upbound Int?
+  endTime_downbound Int?
+
+  station    Station   @relation(fields: [station_id], references: [id])
+  // @@index([station_id], map: "WishList_station_id_fkey")
 }
 
 model TravelTime {
@@ -86,19 +100,33 @@ model WishList {
 
 model Park {
   id    Int    @id @default(autoincrement())
-  name  String @db.VarChar(40)
   pos_x Float
   pos_y Float
+  name  String @db.VarChar(40)
 }
 
 model Mart {
   id    Int    @id @default(autoincrement())
-  name  String @db.VarChar(40)
   pos_x Float
   pos_y Float
+  name  String @db.VarChar(40)
 }
 
 model Cinema {
+  id    Int    @id @default(autoincrement())
+  pos_x Float
+  pos_y Float
+  name  String @db.VarChar(40)
+}
+
+model Cctv {
+  id         Int   @id @default(autoincrement())
+  camera_qty Int
+  pos_x      Float
+  pos_y      Float
+}
+
+model Hospital {
   id    Int    @id @default(autoincrement())
   name  String @db.VarChar(40)
   pos_x Float
