@@ -1,10 +1,9 @@
-import { stationAccess } from "../databases/dbaccess";
+import { stationAccess, dataAccess } from "../databases/dbaccess";
+import haversine from "haversine-distance";
 
 const stationService = {
   // station 생성 서비스
   async postStation(stationInfo) {
-    console.log("stationInfo : ", stationInfo);
-
     // db엑세스로 생성할 역의 정보 전달
     const newStation = await stationAccess.stationCreate(stationInfo);
 
@@ -14,13 +13,51 @@ const stationService = {
 
   // station 검색 서비스 (매개변수 : station_id)
   async findStation(stationId) {
-    console.log("station_id : ", stationId);
-
     // db엑세스로 검색할 역의 id를 전달
-    const foundStation = await stationAccess.stationFindUnique(stationId);
+    const station = await stationAccess.stationFindUnique(stationId);
 
     // 검색한 지하철역 정보 반환
-    return foundStation;
+    return station;
+  },
+
+  async getFacilitiesInfo(stationId) {
+    const station = await stationAccess.stationFindUnique(stationId);
+    const parks = await dataAccess.dataGetFacilities("park");
+    const marts = await dataAccess.dataGetFacilities("mart");
+    const cinemas = await dataAccess.dataGetFacilities("cinema");
+    const stationPos = { lat: station.pos_x, lng: station.pos_y };
+    let nearParks = [];
+    let nearMarts = [];
+    let nearCinemas = [];
+
+    for (let park of parks) {
+      const parkPos = { lat: park.pos_x, lng: park.pos_y };
+      const dist = Math.round(haversine(stationPos, parkPos));
+      if (dist <= 1000) {
+        nearParks.push({ name: park.name, dist: dist });
+      }
+    }
+    for (let mart of marts) {
+      const martPos = { lat: mart.pos_x, lng: mart.pos_y };
+      const dist = Math.round(haversine(stationPos, martPos));
+      if (dist <= 1000) {
+        nearMarts.push({ name: mart.name, dist: dist });
+      }
+    }
+    for (let cinema of cinemas) {
+      const cinemaPos = { lat: cinema.pos_x, lng: cinema.pos_y };
+      const dist = Math.round(haversine(stationPos, cinemaPos));
+      if (dist <= 1000) {
+        nearCinemas.push({ name: cinema.name, dist: dist });
+      }
+    }
+
+    const facilityDatas = {
+      park: nearParks,
+      mart: nearMarts,
+      cinemas: nearCinemas,
+    };
+    return facilityDatas;
   },
 };
 
