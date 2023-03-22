@@ -32,7 +32,7 @@ const wishService = {
     // 특정 유저와 지하철의 찜 현황 확인
     const foundUserWish = await wishAccess.wishUserFindMany(wishInfo);
     console.log(foundUserWish.length);
-    const wish_id = "";
+    let wish_id = "";
     if (foundUserWish.length !== 0) {
       wish_id = foundUserWish[0].id;
     }
@@ -53,8 +53,6 @@ const wishService = {
 
   // 사용자와 해당 역에 대한 찜 내역 생성
   async createWish(wishInfo) {
-    console.log("wishInfo : ", wishInfo);
-
     let newWish = await wishAccess.wishCreate(wishInfo);
 
     // count == 1 생성, == 0 중복으로 미생성
@@ -69,12 +67,30 @@ const wishService = {
   },
 
   // id 값을 기준으로 찜 내역을 삭제
-  async deleteWish(id) {
-    console.log("id : ", id);
+  async deleteWish(wishId) {
+    const deleteCnt = await wishAccess.wishDelete(wishId);
 
-    await wishAccess.wishDelete(id);
+    let deleteMessage = "찜 취소 성공";
+    if (deleteCnt.count == 0) {
+      deleteMessage = "찜 내역이 존재하지 않아 취소에 실패";
+    }
+    return deleteMessage;
+  },
 
-    return;
+  // 지하철 역 페이지에서 유저 정보를 이용해 찜 내역 삭제
+  async deleteStationWish(deleteInfo) {
+    // 유저 정보로 찜 내역 찾기
+    const foundWish = await wishAccess.wishUserFindMany(deleteInfo);
+
+    let deleteMessage = "찜 내역이 존재하지 않아 취소에 실패";
+
+    // 찾은 찜 정보로 삭제
+    if (foundWish.length !== 0) {
+      await wishAccess.wishDelete(foundWish[0].id);
+      deleteMessage = "찜 취소 성공";
+    }
+
+    return deleteMessage;
   },
 };
 
