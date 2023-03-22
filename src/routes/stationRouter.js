@@ -49,7 +49,7 @@ stationRouter.get("/facilities/:station_id", async (req, res, next) => {
     const facilityDatas = await stationService.getFacilitiesInfo(station_id);
     res
       .status(200)
-      .json({ message: "조호에 성공하셨습니다.", data: facilityDatas });
+      .json({ message: "조회에 성공하셨습니다.", data: facilityDatas });
   } catch (err) {
     next(err);
   }
