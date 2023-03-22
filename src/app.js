@@ -32,17 +32,10 @@ app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_PARSER_KEY));
 app.use(
   cors({
-    origin: "http://localhost:3000", // 허용할 클라이언트 주소
+    origin: "http://kdt-ai6-team02.elicecoding.com:3000/", // 허용할 클라이언트 주소
     credentials: true, // 쿠키 전달을 허용
   }),
 );
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.header("Access-Control-Allow-Credentials", "true");
-  next();
-});
 // ---------
 
 // 라우터 등록
