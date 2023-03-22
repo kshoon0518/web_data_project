@@ -16,12 +16,13 @@ wishRouter.get("/mypage", isUser, async (req, res, next) => {
     next(err);
   }
 });
-// 지하철 역 정보 페이지에 접근할때 /wish/stationPage/:station_id
-// 특정 지하철역의 찜 목록을 조회하여 갯수를 헤아리고,
+
+// 지하철 역 정보 페이지에 접근할때 /wish/stationpage/:station_id
+// 특정 지하철역의 찜 목록을 조회하여 갯수,
 // 로그인 상태의 사용자라면 해당 사용자의 찜 wish_id 반환
 wishRouter.get("/stationpage/:station_id", async (req, res, next) => {
   try {
-    // 파라미터 값 확인
+    // 파라미터 값
     const stationId = req.params.station_id;
 
     // 로그인 유무에 따라 서비스 로직에 넘겨주는 데이터를 변화
@@ -72,19 +73,13 @@ wishRouter.post("/:station_id", isUser, async (req, res, next) => {
 // 찜 제거, 취소 (마이페이지)
 wishRouter.delete("/user/:wish_id", isUser, async (req, res, next) => {
   try {
-    const { wish_id } = req.params;
-    if (wish_id === ":wish_id") {
-      console.error("req.params에 wish_id가 없음");
-      throw new Error("req.params가 없습니다.");
-    }
+    const wishId = req.params.wish_id;
 
-    const id = { id: wish_id };
-
-    // id 값을 기준 찜 제거 서비스로 전달
-    await wishService.deleteWish(id);
+    // id 값 기준, 찜 제거 서비스로 전달
+    const deleteMessage = await wishService.deleteWish(wishId);
 
     res.status(200).json({
-      message: "찜 제거 완료",
+      message: deleteMessage,
     });
   } catch (err) {
     next(err);
@@ -94,15 +89,17 @@ wishRouter.delete("/user/:wish_id", isUser, async (req, res, next) => {
 // 찜 제거, 취소 (지하철 역 정보 페이지)
 wishRouter.delete("/station/:station_id", isUser, async (req, res, next) => {
   try {
-    const { station_id } = req.params;
-    const user_id = req.user_id;
-    const deleteInfo = { station_id: station_id, user_id: user_id };
+    const stationId = req.params.station_id;
+    const userId = req.user_id;
 
     // id 값을 기준 찜 제거 서비스로 전달
-    await wishService.deleteWish(deleteInfo);
+    const deleteMessage = await wishService.deleteStationWish({
+      station_id: stationId,
+      user_id: userId,
+    });
 
     res.status(200).json({
-      message: "찜 제거 완료",
+      message: deleteMessage,
     });
   } catch (err) {
     next(err);
