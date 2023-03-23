@@ -12,7 +12,7 @@ userRouter.post("/register", async (req, res, next) => {
       nickname,
       password,
     });
-    res.status(201).json({ message: "회원가입에 성공하였습니다." });
+    res.status(201).json("회원가입에 성공하였습니다.");
   } catch (err) {
     next(err);
   }
@@ -47,7 +47,7 @@ userRouter.post("/login", async (req, res, next) => {
 userRouter.delete("/logout", isUser, async (req, res, next) => {
   try {
     res.clearCookie("token");
-    res.status(200).json({ message: "로그아웃하였습니다." });
+    res.status(200).json("로그아웃하였습니다.");
   } catch (err) {
     next(err);
   }
@@ -57,10 +57,7 @@ userRouter.get("/account", isUser, async (req, res, next) => {
   try {
     const userId = req.user_id;
     const userInfo = await userService.getUserInfo(userId);
-    res.status(200).json({
-      message: "마이페이지 접근에 성공하였습니다.",
-      userInfo: userInfo,
-    });
+    res.status(200).json(userInfo);
   } catch (err) {
     next(err);
   }
@@ -72,16 +69,12 @@ userRouter.patch("/account", isUser, async (req, res, next) => {
     const { nickname, oldPassword, newPassword } = req.body;
     if (nickname) {
       await userService.updateUserNickname(userId, nickname);
-      res.status(200).json({
-        message: "회원정보(닉네임) 변경에 성공하였습니다.",
-      });
+      res.status(200).json("회원정보(닉네임) 변경에 성공하였습니다.");
     } else if (oldPassword && newPassword) {
       await userService.updateUserPassword(userId, oldPassword, newPassword);
-      res.status(200).json({
-        message: "회원정보(비밀번호) 변경에 성공하였습니다.",
-      });
+      res.status(200).json("회원정보(비밀번호) 변경에 성공하였습니다.");
     } else {
-      res.status(400).json({ message: "잘못된 정보로 요청하셨습니다." });
+      res.status(400).json("잘못된 정보로 요청하셨습니다.");
     }
   } catch (err) {
     next(err);
@@ -94,7 +87,7 @@ userRouter.delete("/account", isUser, async (req, res, next) => {
     const { password } = req.body;
     await userService.softDeleteUser(userId, password);
     res.clearCookie("token");
-    res.status(200).json({ message: "삭제 완료" });
+    res.status(200).json("삭제 완료");
   } catch (err) {
     next(err);
   }

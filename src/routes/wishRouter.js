@@ -11,10 +11,7 @@ wishRouter.get("/mypage", isUser, async (req, res, next) => {
     const wishList = await wishService.findWishList(req.user_id);
 
     // 검색한 사용자의 찜 목록을 반환
-    res.status(200).json({
-      message: "사용자의 찜 목록을 반환했습니다.",
-      wishList: wishList,
-    });
+    res.status(200).json(wishList);
   } catch (err) {
     next(err);
   }
@@ -49,10 +46,7 @@ wishRouter.get("/stationpage/:station_id", async (req, res, next) => {
         stationId,
       );
 
-      res.status(200).json({
-        message: "비로그인 상태입니다.",
-        stationWishCount: stationWishCount,
-      });
+      res.status(200).json(stationWishCount);
     }
   } catch (err) {
     next(err);
