@@ -11,7 +11,10 @@ wishRouter.get("/mypage", isUser, async (req, res, next) => {
     const wishList = await wishService.findWishList(req.user_id);
 
     // 검색한 사용자의 찜 목록을 반환
-    res.status(200).json(wishList);
+    res.status(200).json({
+      message: "사용자의 찜 목록을 반환했습니다.",
+      wishList: wishList,
+    });
   } catch (err) {
     next(err);
   }
@@ -46,7 +49,10 @@ wishRouter.get("/stationpage/:station_id", async (req, res, next) => {
         stationId,
       );
 
-      res.status(200).json(stationWishCount);
+      res.status(200).json({
+        message: "비로그인 상태입니다.",
+        stationWishCount: stationWishCount,
+      });
     }
   } catch (err) {
     next(err);
@@ -57,13 +63,16 @@ wishRouter.get("/stationpage/:station_id", async (req, res, next) => {
 wishRouter.post("/:station_id", isUser, async (req, res, next) => {
   try {
     const stationId = req.params.station_id;
+
+    // 사용자 id 값 확인
     const userId = req.user_id;
 
     // 찜 생성 서비스로 id 전달
     const newWish = await wishService.createWish({ userId, stationId });
 
-    res.status(200).json({
-      message: newWish,
+    res.status(201).json({
+      message: "찜목록에 추가되었습니다.",
+      newWish: newWish,
     });
   } catch (err) {
     next(err);
