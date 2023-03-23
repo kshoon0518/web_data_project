@@ -25,6 +25,7 @@ import {
   mainRouter,
   kakaologinRouter,
 } from "./routes";
+import { errorHandler } from "./middlewares";
 
 // ---------
 
@@ -51,5 +52,5 @@ app.use("/", kakaologinRouter);
 // ---------
 
 // 에러처리 미들웨어
-
+app.use(errorHandler);
 // ---------

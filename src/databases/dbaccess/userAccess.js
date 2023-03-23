@@ -11,6 +11,13 @@ const userAccess = {
     return user;
   },
 
+  async userFindOneByNickname(userNickname) {
+    const user = await prisma.user.findUnique({
+      where: { nickname: userNickname },
+    });
+    return user;
+  },
+
   async userFindOneById(userId) {
     const user = await prisma.user.findUnique({
       where: { id: userId },
