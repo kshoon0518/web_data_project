@@ -1,11 +1,11 @@
 import { prisma } from "./";
 
 const kakaologinAccess = {
-  async kakaouserCreate(kakaouserInfo) {
-    const findkakaoUser = await prisma.user.findOne({
-      where: { kakaouserInfo },
+  async kakaoUserFind(kakaoUserId) {
+    const existingUser = await prisma.user.findUnique({
+      where: { kakaoId: kakaoUserId },
     });
-    return findkakaoUser ? true : false;
+    return existingUser;
   },
 };
 

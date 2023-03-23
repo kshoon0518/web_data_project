@@ -3,7 +3,7 @@ import { prisma } from "./";
 const userAccess = {
   async userCreate(userInfo) {
     const newUser = await prisma.user.create({ data: userInfo });
-    return newUser ? true : false;
+    return newUser;
   },
 
   async userFindOneByEmail(userEmail) {
@@ -52,7 +52,7 @@ const userAccess = {
   async userDeleteById(userId) {
     const userDeletion = await prisma.user.update({
       where: { id: userId },
-      data: { deletedAt: new Date() },
+      data: { nickname: null, kakaoId: null, deletedAt: new Date() },
     });
   },
 };
