@@ -37,6 +37,11 @@ const wishAccess = {
     return foundWishList;
   },
 
+  async findWish(info) {
+    const wish = await prisma.wishList.findMany({ where: info });
+    return wish[0];
+  },
+
   // user_id, station_id를 기준으로 검색
   async wishUserFindMany(findInfo) {
     const foundWishList = await prisma.wishList.findMany({

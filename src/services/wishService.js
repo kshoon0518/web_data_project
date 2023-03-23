@@ -65,6 +65,10 @@ const wishService = {
     // 생성한 찜 내역 반환
     return newWish;
   },
+  async findWish(info) {
+    const wish = await wishAccess.findWish(info);
+    return wish;
+  },
 
   // id 값을 기준으로 찜 내역을 삭제
   async deleteWish(wishId) {

@@ -68,10 +68,14 @@ wishRouter.post("/:station_id", isUser, async (req, res, next) => {
     const userId = req.user_id;
 
     // 찜 생성 서비스로 id 전달
-    const newWish = await wishService.createWish({ userId, stationId });
+    const result = await wishService.createWish({ userId, stationId });
+    const newWish = await wishService.findWish({
+      user_id: userId,
+      station_id: stationId,
+    });
 
-    res.status(201).json({
-      message: "찜목록에 추가되었습니다.",
+    res.status(200).json({
+      message: result,
       newWish: newWish,
     });
   } catch (err) {
