@@ -38,7 +38,6 @@ wishRouter.get("/stationpage/:station_id", async (req, res, next) => {
 
       const { stationWishCount, wish_id } =
         await wishService.findStationWishCountWithWishId({
-          message: "로그인이 정상적으로 처리되었습니다.",
           station_id: stationId,
           user_id: userId,
         });
@@ -64,11 +63,9 @@ wishRouter.get("/stationpage/:station_id", async (req, res, next) => {
 wishRouter.post("/:station_id", isUser, async (req, res, next) => {
   try {
     const stationId = req.params.station_id;
-    //console.log(stationId);
 
     // 사용자 id 값 확인
     const userId = req.user_id;
-    //console.log(userId);
 
     // 찜 생성 서비스로 id 전달
     const newWish = await wishService.createWish({ userId, stationId });
