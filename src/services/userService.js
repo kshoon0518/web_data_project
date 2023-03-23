@@ -24,11 +24,11 @@ const userService = {
   async login(logininfo) {
     const { email, password } = logininfo;
     const user = await userAccess.userFindOneByEmail(email);
-    if (user.deletedAt) {
-      throw new Error("삭제된 회원입니다.");
-    }
     if (!user) {
       throw new Error("이메일을 잘못 입력하셨습니다.");
+    }
+    if (user.deletedAt) {
+      throw new Error("삭제된 회원입니다.");
     }
     const isPasswordCorrect = await checkPassword(user.id, password);
     if (!isPasswordCorrect) {

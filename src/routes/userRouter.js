@@ -1,5 +1,5 @@
 import express from "express";
-import { isUser } from "../middlewares";
+import { isUser, isGuest } from "../middlewares";
 import { userService } from "../services";
 const userRouter = express.Router();
 
@@ -18,7 +18,7 @@ userRouter.post("/register", async (req, res, next) => {
   }
 });
 
-userRouter.post("/login", async (req, res, next) => {
+userRouter.post("/login", isGuest, async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const loginResult = await userService.login({ email, password });
