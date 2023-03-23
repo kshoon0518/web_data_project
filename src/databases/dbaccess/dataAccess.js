@@ -2,7 +2,6 @@ import { prisma } from "./";
 import fs from "fs";
 import path from "path";
 import { parse } from "csv-parse/sync";
-import { fileURLToPath } from "url";
 
 const __dirname = path.resolve();
 
@@ -16,7 +15,7 @@ const dataAccess = {
       "stationData" + ".csv",
     );
     const data = fs.readFileSync(csvPath, "utf8");
-    const line = parse(data); // [ '', '지하철역명', '노선명', 'X좌표값', 'Y좌표값' ],
+    const line = parse(data);
     line.shift();
 
     for (let row of line) {
@@ -41,6 +40,92 @@ const dataAccess = {
       });
     }
 
+    return;
+  },
+
+  // 상행으로 크리에이트
+  async dataCrowdedCreate() {
+    const csvPath = path.join(
+      __dirname,
+      "src",
+      "databases",
+      "data",
+      "station_crowdedness_upbound" + ".csv",
+    );
+    const data = fs.readFileSync(csvPath, "utf8");
+    const line = parse(data); //
+    line.shift();
+
+    for (let row of line) {
+      const [
+        idx,
+        station_name,
+        station_line,
+        direct,
+        startTime_upbound,
+        endTime_upbound,
+      ] = row;
+
+      const station = await prisma.station.findMany({
+        where: {
+          station_name: station_name,
+          station_line: station_line,
+        },
+      });
+      if (station.length != 0) {
+        const stationId = station[0].id;
+        const newData = await prisma.StationCrowdedness.create({
+          data: {
+            station_id: stationId,
+            startTime_upbound: parseInt(startTime_upbound),
+            endTime_upbound: parseInt(endTime_upbound),
+          },
+        });
+      }
+    }
+
+    return;
+  },
+  // 하행으로 업데이트
+  async dataCrowdedUpdate() {
+    const csvPath = path.join(
+      __dirname,
+      "src",
+      "databases",
+      "data",
+      "station_crowdedness_downbound" + ".csv",
+    );
+    const data = fs.readFileSync(csvPath, "utf8");
+    const line = parse(data); //
+    line.shift();
+
+    for (let row of line) {
+      const [
+        idx,
+        station_name,
+        station_line,
+        direct,
+        startTime_downbound,
+        endTime_downbound,
+      ] = row;
+
+      const station = await prisma.station.findMany({
+        where: {
+          station_name: station_name,
+          station_line: station_line,
+        },
+      });
+      if (station.length != 0) {
+        const stationId = station[0].id;
+        const updatedData = await prisma.StationCrowdedness.updateMany({
+          where: { station_id: stationId },
+          data: {
+            startTime_downbound: parseInt(startTime_downbound),
+            endTime_downbound: parseInt(endTime_downbound),
+          },
+        });
+      }
+    }
     return;
   },
 
@@ -124,6 +209,11 @@ const dataAccess = {
   async dataPostFacilities(newData, field) {
     const createdData = prisma[field].createMany({ data: newData });
     return createdData;
+  },
+
+  async dataGetFacilities(field) {
+    const facilityDatas = prisma[field].findMany();
+    return facilityDatas;
   },
 };
 
