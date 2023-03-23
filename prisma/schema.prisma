@@ -26,8 +26,8 @@ model Station {
   station_name       String               @db.VarChar(30)
   station_line       String               @db.VarChar(10)
   area               String?              @db.VarChar(20)
-  rent_price         Int
-  lease_price        Int
+  rent_price         Float
+  lease_price        Float
   pos_x              String               @db.VarChar(40)
   pos_y              String               @db.VarChar(40)
   Review             Review[]

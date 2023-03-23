@@ -7,7 +7,6 @@ stationRouter.post("/station", async (req, res, next) => {
     // 요청 바디에서 필요한 내용 확인
     const dataStation = req.body;
     if (!dataStation) {
-      console.error("req.body에 정보가 없음");
       throw new Error("req.body가 없습니다.");
     }
 
@@ -27,11 +26,6 @@ stationRouter.get("/station/:station_id", async (req, res, next) => {
   try {
     // 파라미터 값 확인
     const { station_id } = req.params;
-
-    if (station_id === ":station_id") {
-      console.error("req.params에 station_id가 없음");
-      throw new Error("req.params가 없습니다.");
-    }
 
     // station 정보를 검색하는 서비스 로직으로 전달
     const dataStation = await stationService.findStation(station_id);
@@ -56,10 +50,3 @@ stationRouter.get("/facilities/:station_id", async (req, res, next) => {
 });
 
 export { stationRouter };
-
-// then catch 스타일로 작성?
-// stationRouter.post(“/station”, async (req, res, next) => {
-//   await StationService.postStation(req.body.???)
-//     .then( result => res.json(result))
-//     .catch(err => erroHandler(err));
-// });
