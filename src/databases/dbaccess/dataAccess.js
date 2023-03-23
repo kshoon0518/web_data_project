@@ -6,6 +6,7 @@ import { parse } from "csv-parse/sync";
 const __dirname = path.resolve();
 
 const dataAccess = {
+  // 스테이션 데이터 생성
   async dataStationCreate() {
     const csvPath = path.join(
       __dirname,
@@ -40,6 +41,57 @@ const dataAccess = {
       });
     }
 
+    return;
+  },
+  // 스테이션 데이터 업데이트
+  async dataStationUpdate() {
+    const csvPath = path.join(
+      __dirname,
+      "src",
+      "databases",
+      "data",
+      "stationData_for_update" + ".csv",
+    );
+    const data = fs.readFileSync(csvPath, "utf8");
+    const line = parse(data);
+    line.shift();
+
+    for (let row of line) {
+      const [
+        idx,
+        station_id,
+        station_name,
+        station_line,
+        area,
+        rent_price,
+        lease_price,
+        pos_x,
+        pos_y,
+      ] = row;
+
+      // 업데이트할 데이터 검색
+      const station = await prisma.station.findMany({
+        where: {
+          station_name: station_name,
+          station_line: station_line,
+        },
+      });
+
+      // 데이터 업데이트
+      if (station.length != 0) {
+        const stationId = station[0].id;
+        const updatedData = await prisma.station.updateMany({
+          where: {
+            id: stationId,
+          },
+          data: {
+            rent_price: parseFloat(rent_price),
+            lease_price: parseFloat(lease_price),
+          },
+        });
+      }
+      console.log("잘들어가?...?");
+    }
     return;
   },
 

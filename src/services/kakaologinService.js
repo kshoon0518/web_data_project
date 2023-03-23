@@ -4,7 +4,6 @@ import axios from "axios";
 
 const kakaologinService = {
   async loginKakaoUser(kakaouserInfo) {
-    console.log(kakaouserInfo);
     //액세스 토큰을 받아온다
     const {
       data: { access_token: kakaoAccessToken },
@@ -12,8 +11,11 @@ const kakaologinService = {
       params: {
         grant_type: "authorization_code",
         client_id: "b5fed7f18075803554956c416973bb45",
-        redirect_uri: "http://localhost:8001/ouath/?platform=kakao",
+        redirect_uri: "http://localhost:3000/oauth/callback/kakao",
         code: kakaouserInfo,
+      },
+      headers: {
+        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
       },
     });
     console.log(kakaoAccessToken);

@@ -18,7 +18,6 @@ reviewRouter.post("/review/:station_id", isUser, async (req, res, next) => {
       newReview != null
         ? "리뷰 작성에 성공하였습니다."
         : "리뷰 작성에 실패하였습니다.";
-    console.log(isSuccess);
     res.status(201).json(newReview);
   } catch (err) {
     next(err);
@@ -57,7 +56,6 @@ reviewRouter.patch("/review/:review_id", isUser, async (req, res, next) => {
         user_id,
         body,
       });
-      console.log("updatedreview:", updatedreview);
       res.status(200).json("리뷰가 수정되었습니다.");
     } else {
       res.status(200).json("리뷰수정에 실패하였습니다.");

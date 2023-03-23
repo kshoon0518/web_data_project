@@ -57,6 +57,8 @@ wishRouter.get("/stationpage/:station_id", async (req, res, next) => {
 wishRouter.post("/:station_id", isUser, async (req, res, next) => {
   try {
     const stationId = req.params.station_id;
+
+    // 사용자 id 값 확인
     const userId = req.user_id;
 
     // 찜 생성 서비스로 id 전달

@@ -29,12 +29,12 @@ userRouter.post("/login", async (req, res, next) => {
       signed: true,
     });
     if (isAdmin) {
-      res.status(200).json({
+      res.status(201).json({
         message: "(관리자)로그인에 성공하였습니다.",
         isAdmin: isAdmin,
       });
     } else {
-      res.status(200).json({
+      res.status(201).json({
         message: "(사용자)로그인에 성공하였습니다.",
         isAdmin: isAdmin,
       });
