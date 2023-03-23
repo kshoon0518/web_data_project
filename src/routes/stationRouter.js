@@ -31,11 +31,6 @@ stationRouter.get("/station/:station_id", async (req, res, next) => {
     // 파라미터 값 확인
     const { station_id } = req.params;
 
-    if (station_id === ":station_id") {
-      //console.error("req.params에 station_id가 없음");
-      throw new Error({ message: "req.params가 없습니다." });
-    }
-
     // station 정보를 검색하는 서비스 로직으로 전달
     const dataStation = await stationService.findStation(station_id);
 

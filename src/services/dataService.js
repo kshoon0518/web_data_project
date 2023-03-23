@@ -6,6 +6,11 @@ const dataService = {
     return;
   },
 
+  async dataStationUpdate() {
+    await dataAccess.dataStationUpdate();
+    return;
+  },
+
   async dataCrowdedCreate() {
     await dataAccess.dataCrowdedCreate();
     return;

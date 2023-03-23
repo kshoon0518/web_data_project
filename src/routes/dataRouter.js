@@ -11,6 +11,15 @@ dataRouter.get("/station_data", async (req, res, next) => {
   }
 });
 
+dataRouter.patch("/station_data", async (req, res, next) => {
+  try {
+    await dataService.dataStationUpdate();
+    res.status(200).json({ message: "데이터 수정완료" });
+  } catch (err) {
+    next(err);
+  }
+});
+
 dataRouter.post("/station_crowdedness_startTime", async (req, res, next) => {
   try {
     await dataService.dataCrowdedCreate();
