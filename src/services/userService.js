@@ -5,6 +5,16 @@ import { checkPassword } from "../utils/checkPassword";
 
 const userService = {
   async createUser(userInfo) {
+    const userEmail = await userAccess.userFindOneByEmail(userInfo.email);
+    const userNickname = await userAccess.userFindOneByNickname(
+      userInfo.nickname,
+    );
+    if (userEmail) {
+      throw new Error("이미 존재하는 이메일입니다.");
+    }
+    if (userNickname) {
+      throw new Error("이미 존재하는 닉네임입니다.");
+    }
     const hashed = await bcrypt.hash(userInfo.password, 10);
     userInfo.password = hashed;
     const isSuccess = await userAccess.userCreate(userInfo);
