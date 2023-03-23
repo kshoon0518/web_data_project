@@ -1,48 +1,65 @@
 import jwt from "jsonwebtoken";
 import { kakaologinAccess, userAccess } from "../databases/dbaccess";
 import axios from "axios";
+import bcrypt from "bcrypt";
 
 const kakaologinService = {
   async loginKakaoUser(kakaouserInfo) {
     //액세스 토큰을 받아온다
-    const {
-      data: { access_token: kakaoAccessToken },
-    } = await axios.post("https://kauth.kakao.com/oauth/token", {
-      params: {
-        grant_type: "authorization_code",
-        client_id: "b5fed7f18075803554956c416973bb45",
-        redirect_uri: "http://localhost:3000/oauth/callback/kakao",
-        code: kakaouserInfo,
-      },
-      headers: {
-        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
-      },
-    });
-    console.log(kakaoAccessToken);
+    const resultToken = // { data: { access_token: kakaoAccessToken } }
+      await axios.post(
+        "https://kauth.kakao.com/oauth/token",
+        {
+          grant_type: "authorization_code",
+          client_id: "b5fed7f18075803554956c416973bb45",
+          redirect_uri: "http://localhost:3000/oauth/callback/kakao",
+          code: kakaouserInfo,
+        },
+        {
+          headers: {
+            "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+          },
+        },
+      );
+    const kakaoAccessToken = resultToken.data.access_token;
 
     //유저 정보를 받아온다
-    const { data: kakaoUser } = await axios(
-      "https://kapi.kakao.com/v2/user/me",
-      {
+    const resultUser = //{ data: kakaoUser }
+      await axios.get("https://kapi.kakao.com/v2/user/me", {
         headers: {
           Authorization: `Bearer ${kakaoAccessToken}`,
         },
-      },
-    );
-    console.log(kakaoUser);
-
-    const existingUser = kakaologinAccess.findOne(kakaoUser.id);
-    console.log(existingUser);
-
-    if (existingUser === null) {
-      //회원가입한 유저
-      const newUser = await userAccess.userCreate({
-        email: kakaoUser.kakao_account.email,
-        name: kakaoUser.kakao_account.name,
-        nickname: kakaoUser.properties.nickname,
-        password: Math.random().toString(10),
       });
-      console.log(newUser);
+    const kakaoId = resultUser.data.id.toString();
+    const existingUser = await kakaologinAccess.kakaoUserFind(kakaoId);
+
+    if (existingUser && !existingUser.deletedAt) {
+      //기존회원
+      const accessToken = jwt.sign(
+        { user_id: existingUser.id, isAdmin: existingUser.isAdmin },
+        process.env.JWT_SECRET_KEY,
+        {
+          expiresIn: "1h",
+        },
+      );
+      return {
+        isNewUser: false,
+        accessToken: accessToken,
+        isAdmin: existingUser.isAdmin,
+      };
+
+      //비회원
+    } else {
+      const kakaouserEmail = Math.random().toString(36).slice(2) + "@kakao.com";
+      const kakaoRandomPassword = Math.random().toString(10).slice(2);
+      const kakaoUserPassword = await bcrypt.hash(kakaoRandomPassword, 10);
+      const newUser = await userAccess.userCreate({
+        email: kakaouserEmail,
+        name: resultUser.data.properties.nickname,
+        nickname: resultUser.data.properties.nickname,
+        kakaoId: kakaoId,
+        password: kakaoUserPassword,
+      });
 
       const accessToken = jwt.sign(
         { user_id: newUser.id, isAdmin: newUser.isAdmin },
@@ -51,20 +68,11 @@ const kakaologinService = {
           expiresIn: "1h",
         },
       );
-      console.log("newUser_accessToken:", accessToken);
-      return accessToken;
-
-      //기존유저
-    } else {
-      const accessToken = jwt.sign(
-        { user_id: existingUser.id, isAdmin: existingUser.isAdmin },
-        process.env.JWT_SECRET_KEY,
-        {
-          expiresIn: "1h",
-        },
-      );
-      console.log("existingUser_accessToken:", accessToken);
-      return accessToken;
+      return {
+        isNewUser: true,
+        accessToken: accessToken,
+        isAdmin: newUser.isAdmin,
+      };
     }
   },
 };
