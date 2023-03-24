@@ -31,7 +31,7 @@ const mainService = {
   ) {
     const travelTime = await mainAccess.mainFindTravelTime();
     const firstDep = await mainAccess.mainStationFindById(stationId);
-    const clacTime = [
+    const calcTime = [
       {
         id: stationId,
         station: {
@@ -55,7 +55,7 @@ const mainService = {
     while (true) {
       let updated = false;
       for (let travelTimeData of travelTime) {
-        if (clacTime.some(node => node.id == travelTimeData.station_dep_id)) {
+        if (calcTime.some(node => node.id == travelTimeData.station_dep_id)) {
           const {
             station_arv,
             station_dep_id,
@@ -68,8 +68,8 @@ const mainService = {
             feel_time_weekend_n,
             travel_time,
           } = travelTimeData;
-          const dep_node = clacTime.find(node => node.id == station_dep_id);
-          const arv_node = clacTime.find(node => node.id == station_arv_id);
+          const dep_node = calcTime.find(node => node.id == station_dep_id);
+          const arv_node = calcTime.find(node => node.id == station_arv_id);
           const arv_time = dep_node.time + travel_time;
           const ftime_dm = dep_node.dm + feel_time_weekday_m;
           const ftime_dd = dep_node.dd + feel_time_weekday_d;
@@ -77,9 +77,17 @@ const mainService = {
           const ftime_em = dep_node.em + feel_time_weekend_m;
           const ftime_ed = dep_node.ed + feel_time_weekend_d;
           const ftime_en = dep_node.en + feel_time_weekend_n;
-
+          if (arv_node && arv_node.time > arv_time) {
+            arv_node.time = arv_time;
+            arv_node.dm = ftime_dm;
+            arv_node.dd = ftime_dd;
+            arv_node.dn = ftime_dn;
+            arv_node.em = ftime_em;
+            arv_node.ed = ftime_ed;
+            arv_node.en = ftime_en;
+          }
           if (!arv_node && arv_time <= time_max) {
-            clacTime.push({
+            calcTime.push({
               id: station_arv_id,
               station: station_arv,
               time: arv_time,
@@ -96,7 +104,7 @@ const mainService = {
       }
       if (!updated) break;
     }
-    const filtered = clacTime.filter(data => {
+    const filtered = calcTime.filter(data => {
       if (data.time < time_min) {
         return false;
       } else if (
