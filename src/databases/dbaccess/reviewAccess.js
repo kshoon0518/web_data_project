@@ -24,6 +24,7 @@ const reviewAccess = {
         },
         user: {
           select: {
+            nickname: true,
             name: true,
           },
         },
