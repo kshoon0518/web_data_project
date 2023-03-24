@@ -50,7 +50,12 @@ const userService = {
   },
 
   async getUserInfo(userId) {
-    const user = await userAccess.userFindOneById(userId);
+    const userInfo = await userAccess.userFindOneById(userId);
+    if (userInfo.kakaoId) {
+      userInfo.email = "카카오 유저";
+    }
+    const { kakaoId, ...rest } = userInfo;
+    const user = rest;
     if (!user) {
       const msg = "해당 사용자는 존재하지 않습니다.";
       setError(msg, 400);
