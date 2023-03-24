@@ -85,6 +85,7 @@ const mainService = {
             arv_node.em = ftime_em;
             arv_node.ed = ftime_ed;
             arv_node.en = ftime_en;
+            updated = true;
           }
           if (!arv_node && arv_time <= time_max) {
             calcTime.push({
