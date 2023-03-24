@@ -26,6 +26,7 @@ const userAccess = {
         email: true,
         name: true,
         nickname: true,
+        kakaoId: true,
       },
     });
     return user;
