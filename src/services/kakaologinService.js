@@ -6,21 +6,20 @@ import bcrypt from "bcrypt";
 const kakaologinService = {
   async loginKakaoUser(kakaouserInfo) {
     //액세스 토큰을 받아온다
-    const resultToken = // { data: { access_token: kakaoAccessToken } }
-      await axios.post(
-        "https://kauth.kakao.com/oauth/token",
-        {
-          grant_type: "authorization_code",
-          client_id: "b5fed7f18075803554956c416973bb45",
-          redirect_uri: "http://localhost:3000/oauth/callback/kakao",
-          code: kakaouserInfo,
+    const resultToken = await axios.post(
+      "https://kauth.kakao.com/oauth/token",
+      {
+        grant_type: "authorization_code",
+        client_id: process.env.KAKAO_CLIENT_ID,
+        redirect_uri: process.env.KAKAO_DIRECT_URI,
+        code: kakaouserInfo,
+      },
+      {
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
         },
-        {
-          headers: {
-            "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
-          },
-        },
-      );
+      },
+    );
     const kakaoAccessToken = resultToken.data.access_token;
 
     //유저 정보를 받아온다

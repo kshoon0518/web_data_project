@@ -9,7 +9,9 @@ const port = process.env.PORT || 3001;
 
 // express 서버 열기
 app.listen(port, () => {
-  console.log(`정상적으로 서버를 시작하였습니다. http://localhost:${port}`);
+  console.log(
+    `정상적으로 서버를 시작하였습니다. ${process.env.ADDRESS}:${port}`,
+  );
 });
 
 // ---------
