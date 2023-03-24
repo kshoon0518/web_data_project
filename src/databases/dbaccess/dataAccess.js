@@ -90,7 +90,6 @@ const dataAccess = {
           },
         });
       }
-      console.log("잘들어가?...?");
     }
     return;
   },

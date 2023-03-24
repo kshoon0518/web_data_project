@@ -1,5 +1,6 @@
 import express from "express";
 import { stationService } from "../services";
+import { setError } from "../utils";
 const stationRouter = express.Router();
 
 stationRouter.post("/station", async (req, res, next) => {
@@ -7,7 +8,8 @@ stationRouter.post("/station", async (req, res, next) => {
     // 요청 바디에서 필요한 내용 확인
     const dataStation = req.body;
     if (!dataStation) {
-      throw new Error("req.body가 없습니다.");
+      const msg = "req.body가 없습니다.";
+      setError(msg, 401);
     }
 
     // station을 생성하는 서비스 로직으로 전달

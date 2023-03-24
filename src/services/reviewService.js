@@ -19,7 +19,6 @@ const reviewService = {
   },
 
   async updateReview({ review_id, body }) {
-    console.log(review_id);
     const patchReview = await reviewAccess.reviewUpdate({ review_id, body });
     return patchReview;
   },
