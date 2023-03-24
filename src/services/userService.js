@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { userAccess } from "../databases/dbaccess";
-import { checkPassword } from "../utils/checkPassword";
+import { checkPassword, setError } from "../utils/";
 
 const userService = {
   async createUser(userInfo) {
@@ -10,10 +10,12 @@ const userService = {
       userInfo.nickname,
     );
     if (userEmail) {
-      throw new Error("이미 존재하는 이메일입니다.");
+      const msg = "이미 존재하는 이메일입니다.";
+      setError(msg, 400);
     }
     if (userNickname) {
-      throw new Error("이미 존재하는 닉네임입니다.");
+      const msg = "이미 존재하는 닉네임입니다.";
+      setError(msg, 400);
     }
     const hashed = await bcrypt.hash(userInfo.password, 10);
     userInfo.password = hashed;
@@ -25,14 +27,17 @@ const userService = {
     const { email, password } = logininfo;
     const user = await userAccess.userFindOneByEmail(email);
     if (!user) {
-      throw new Error("이메일을 잘못 입력하셨습니다.");
+      const msg = "이메일을 잘못 입력하셨습니다.";
+      setError(msg, 400);
     }
     if (user.deletedAt) {
-      throw new Error("삭제된 회원입니다.");
+      const msg = "삭제된 회원입니다.";
+      setError(msg, 400);
     }
     const isPasswordCorrect = await checkPassword(user.id, password);
     if (!isPasswordCorrect) {
-      throw new Error("비밀번호를 잘못 입력하셨습니다.");
+      const msg = "비밀번호를 잘못 입력하셨습니다.";
+      setError(msg, 400);
     }
     const token = jwt.sign(
       { user_id: user.id, isAdmin: user.isAdmin },
@@ -47,7 +52,8 @@ const userService = {
   async getUserInfo(userId) {
     const user = await userAccess.userFindOneById(userId);
     if (!user) {
-      throw new Error("해당 사용자는 존재하지 않습니다.");
+      const msg = "해당 사용자는 존재하지 않습니다.";
+      setError(msg, 400);
     }
     return user;
   },
@@ -62,7 +68,8 @@ const userService = {
   async updateUserPassword(userId, oldPassword, newPassword) {
     const isPasswordCorrect = await checkPassword(userId, oldPassword);
     if (!isPasswordCorrect) {
-      throw new Error("기존 비밀번호를 잘못 입력하셨습니다.");
+      const msg = "기존 비밀번호를 잘못 입력하셨습니다.";
+      setError(msg, 400);
     }
     const password = await bcrypt.hash(newPassword, 10);
     const isSuccess = await userAccess.userUpdate(userId, {
@@ -74,7 +81,8 @@ const userService = {
   async softDeleteUser(userId, password) {
     const isPasswordCorrect = await checkPassword(userId, password);
     if (!isPasswordCorrect) {
-      throw new Error("비밀번호를 잘못 입력하셨습니다.");
+      const msg = "비밀번호를 잘못 입력하셨습니다.";
+      setError(msg, 400);
     }
     userAccess.userDeleteById(userId);
   },

@@ -3,7 +3,7 @@ import { isUser, isGuest } from "../middlewares";
 import { userService } from "../services";
 const userRouter = express.Router();
 
-userRouter.post("/register", async (req, res, next) => {
+userRouter.post("/register", isGuest, async (req, res, next) => {
   try {
     const { email, name, nickname, password } = req.body;
     await userService.createUser({
@@ -12,7 +12,7 @@ userRouter.post("/register", async (req, res, next) => {
       nickname,
       password,
     });
-    res.status(201).json("회원가입에 성공하였습니다.");
+    res.status(201).json({ msessage: "회원가입에 성공하였습니다." });
   } catch (err) {
     next(err);
   }
@@ -47,7 +47,7 @@ userRouter.post("/login", isGuest, async (req, res, next) => {
 userRouter.delete("/logout", isUser, async (req, res, next) => {
   try {
     res.clearCookie("token");
-    res.status(200).json("로그아웃하였습니다.");
+    res.status(200).json({ msessage: "로그아웃하였습니다." });
   } catch (err) {
     next(err);
   }
@@ -69,12 +69,16 @@ userRouter.patch("/account", isUser, async (req, res, next) => {
     const { nickname, oldPassword, newPassword } = req.body;
     if (nickname) {
       await userService.updateUserNickname(userId, nickname);
-      res.status(200).json("회원정보(닉네임) 변경에 성공하였습니다.");
+      res
+        .status(200)
+        .json({ msessage: "회원정보(닉네임) 변경에 성공하였습니다." });
     } else if (oldPassword && newPassword) {
       await userService.updateUserPassword(userId, oldPassword, newPassword);
-      res.status(200).json("회원정보(비밀번호) 변경에 성공하였습니다.");
+      res
+        .status(200)
+        .json({ msessage: "회원정보(비밀번호) 변경에 성공하였습니다." });
     } else {
-      res.status(400).json("잘못된 정보로 요청하셨습니다.");
+      res.status(400).json({ msessage: "잘못된 정보로 요청하셨습니다." });
     }
   } catch (err) {
     next(err);
@@ -87,7 +91,7 @@ userRouter.delete("/account", isUser, async (req, res, next) => {
     const { password } = req.body;
     await userService.softDeleteUser(userId, password);
     res.clearCookie("token");
-    res.status(200).json("삭제 완료");
+    res.status(200).json({ msessage: "삭제 완료" });
   } catch (err) {
     next(err);
   }

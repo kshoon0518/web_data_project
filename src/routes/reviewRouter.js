@@ -14,10 +14,6 @@ reviewRouter.post("/review/:station_id", isUser, async (req, res, next) => {
       user_id,
       body,
     });
-    const isSuccess =
-      newReview != null
-        ? "리뷰 작성에 성공하였습니다."
-        : "리뷰 작성에 실패하였습니다.";
     res.status(201).json(newReview);
   } catch (err) {
     next(err);
@@ -56,9 +52,9 @@ reviewRouter.patch("/review/:review_id", isUser, async (req, res, next) => {
         user_id,
         body,
       });
-      res.status(200).json("리뷰가 수정되었습니다.");
+      res.status(200).json({ msessage: "리뷰가 수정되었습니다." });
     } else {
-      res.status(200).json("리뷰수정에 실패하였습니다.");
+      res.status(200).json({ msessage: "리뷰수정에 실패하였습니다." });
     }
   } catch (err) {
     next(err);
@@ -69,7 +65,7 @@ reviewRouter.delete("/review/:review_id", isUser, async (req, res, next) => {
   try {
     const review_id = req.params;
     await reviewService.deleteReviewIdReview(review_id);
-    res.status(200).json("리뷰가 삭제되었습니다.");
+    res.status(200).json({ msessage: "리뷰가 삭제되었습니다." });
     // res.status(200).end();
   } catch (err) {
     next(err);
